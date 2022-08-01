@@ -7,13 +7,24 @@
     <icon/>
     <properties>
         <propertyGroup caption="General">
-            <property key="dateAttribute" type="attribute" required="true">
-                <caption>Attribute</caption>
-                <description>The date attribute to store the date in.</description>
-                <attributeTypes>
-                    <attributeType name="DateTime"/>
-                </attributeTypes>
-            </property>
+            <propertyGroup caption="Datasource">
+                <property key="dateAttribute" type="attribute" required="true">
+                    <caption>Attribute</caption>
+                    <description>The date attribute to store the date in.</description>
+                    <attributeTypes>
+                        <attributeType name="DateTime"/>
+                    </attributeTypes>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Label">
+                <systemProperty key="Label"/>
+            </propertyGroup>
+            <propertyGroup caption="Editability">
+                <systemProperty key="Editability"/>
+            </propertyGroup>
+            <propertyGroup caption="Visibility">
+                <systemProperty key="Visibility"/>
+            </propertyGroup>
         </propertyGroup>
     </properties>
 </widget>
