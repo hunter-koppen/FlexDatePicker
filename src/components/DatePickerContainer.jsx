@@ -9,12 +9,13 @@ import "react-datepicker/dist/react-datepicker.css";
 export class DatePickerContainer extends Component {
     state = {
         dateValue: null,
+        dateValueInitial: null,
         editedvalue: null,
         placeholder: null,
         firstDayOfWeek: null,
         locale: null,
         open: false,
-        dateFormat: null,
+        dateFormat: null
     };
 
     componentDidMount() {
@@ -46,6 +47,9 @@ export class DatePickerContainer extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
+            if (this.state.dateValueInitial === null) {
+                this.setState({ dateValueInitial: this.props.dateAttribute.value });
+            }
             if (
                 prevProps.dateAttribute !== this.props.dateAttribute &&
                 this.props.dateAttribute !== this.state.editedvalue
@@ -71,6 +75,9 @@ export class DatePickerContainer extends Component {
         }
     };
 
+    onBlur = () => {
+        this.props.onLeaveAction(this.state.dateValueInitial, this.state.dateValue);
+    };
 
     togglePicker = () => {
         this.setState({ open: !this.state.open });
@@ -82,7 +89,7 @@ export class DatePickerContainer extends Component {
 
     render() {
         return (
-            <div className="mx-compound-control" >
+            <div className="mx-compound-control" onFocus={this.props.onEnterAction} onBlur={this.onBlur}>
                 <DatePicker
                     selected={this.state.dateValue}
                     onChange={this.onChange}

@@ -12,7 +12,7 @@
 
 .react-datepicker__day--today:not(.react-datepicker__day--in-range),
 .react-datepicker__day--keyboard-selected {
-    background-color: #ededed;
+    background-color: #e5e5e5;
 }
 
 .react-datepicker__week-number {
