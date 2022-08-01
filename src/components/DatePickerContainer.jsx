@@ -13,10 +13,22 @@ export class DatePickerContainer extends Component {
     };
 
     componentDidMount() {
+        const days = mx.session.sessionData.locale.dates.shortWeekdays;
+        const months = mx.session.sessionData.locale.dates.months;
+        const locale = {
+            localize: {
+                day: n => days[n],
+                month: n => months[n]
+            },
+            formatLong: {
+                date: () => mx.session.sessionData.locale.patterns.date
+            }
+        };
+
         this.setState({
             firstDayOfWeek: mx.session.sessionData.locale.firstDayOfWeek,
-            locale: mx.session.sessionData.locale.languageTag
-        })
+            locale: locale
+        });
     }
 
     componentDidUpdate(prevProps) {
