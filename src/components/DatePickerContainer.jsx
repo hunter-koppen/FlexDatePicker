@@ -179,12 +179,12 @@ export class DatePickerContainer extends Component {
                 />
                 <button
                     type="button"
-                    class="btn mx-button"
-                    tabindex="-1"
+                    className="btn mx-button"
+                    tabIndex={-1}
                     disabled={this.state.readOnly}
                     onClick={this.togglePicker}
                 >
-                    <span class="glyphicon glyphicon-calendar"></span>
+                    <span className="glyphicon glyphicon-calendar"></span>
                 </button>
                 <Alert
                     bootstrapStyle={"danger"}
