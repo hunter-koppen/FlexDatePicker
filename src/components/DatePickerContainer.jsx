@@ -1,9 +1,10 @@
-import { Component, createElement } from "react";
+import React, { Component, createElement } from "react";
 import { Alert } from "./Alert";
 
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+const nodeRef = React.createRef();
 
 export class DatePickerContainer extends Component {
     state = {
@@ -25,6 +26,9 @@ export class DatePickerContainer extends Component {
     };
 
     componentDidMount() {
+        const parentNode = nodeRef.current.parentNode;
+        parentNode.classList.add("mx-datepicker");
+
         const eras = mx.session.sessionData.locale.dates.eras;
         const quarters = ["1", "2", "3", "4"];
         const months = mx.session.sessionData.locale.dates.months;
@@ -152,7 +156,7 @@ export class DatePickerContainer extends Component {
 
     render() {
         return (
-            <div className="mx-compound-control" onFocus={this.props.onEnterAction} onBlur={this.onBlur}>
+            <div className="mx-compound-control" onFocus={this.props.onEnterAction} onBlur={this.onBlur} ref={nodeRef}>
                 <DatePicker
                     selected={this.state.dateValueStart}
                     selectsRange={this.props.dateRange}
