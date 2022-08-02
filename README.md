@@ -7,6 +7,8 @@ Next to the standard functionality like a placeholder and input events this widg
 - Disable days in the picker itself (e.g. only future days)
 - Date ranges
 
+It also takes all the date formatting and language from the Mendix session and validation messages on the input also work correctly.
+
 ## Usage
 Simply drag the widget on a page with a date attribute and attach it to the widget
 
