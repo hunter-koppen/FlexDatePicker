@@ -45,10 +45,24 @@
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Settings">
-            <property key="showWeekNumbers" type="boolean" defaultValue="false">
-                <caption>Show Week Numbers?</caption>
-                <description/>
-            </property>
+            <propertyGroup caption="Weeknumbers">
+                <property key="showWeekNumbers" type="boolean" defaultValue="false">
+                    <caption>Show Week Numbers?</caption>
+                    <description/>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Disable dates">
+                <property key="minDate" type="expression" defaultValue="" required="false">
+                    <caption>Min date</caption>
+                    <description>Disable all days before this date.</description>
+                    <returnType type="DateTime" />
+                </property>
+                <property key="maxDate" type="expression" defaultValue="" required="false">
+                    <caption>Max date</caption>
+                    <description>Disable all days after this date.</description>
+                    <returnType type="DateTime" />
+                </property>
+            </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Events">
             <property key="onEnterAction" type="action" required="false">

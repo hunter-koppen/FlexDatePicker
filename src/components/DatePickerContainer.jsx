@@ -21,7 +21,9 @@ export class DatePickerContainer extends Component {
         open: false,
         dateFormat: null,
         readOnly: false,
-        validationFeedback: null
+        validationFeedback: null,
+        minDate: null,
+        maxDate: null
     };
 
     componentDidMount() {
@@ -54,23 +56,8 @@ export class DatePickerContainer extends Component {
     componentDidUpdate(prevProps) {
         console.log(this.state);
         if (this.props.dateRange) {
-            if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
-                if (this.state.dateValueStartInitial === null) {
-                    this.setState({
-                        dateValueStartInitial: this.props.dateAttribute.value,
-                        dateValueEndInitial: this.props.dateAttributeEnd.value,
-                        readOnly: this.props.dateAttribute.readOnly
-                    });
-                }
-                if (prevProps.dateAttribute.validation !== this.props.dateAttribute.validation) {
-                    this.setState({ validationFeedback: this.props.dateAttribute.validation });
-                }
-                if (
-                    prevProps.dateAttribute !== this.props.dateAttribute &&
-                    this.props.dateAttribute !== this.state.editedValueStart
-                ) {
-                    this.setState({ dateValueStart: this.props.dateAttribute.value });
-                }
+            if (this.props.dateAttributeEnd && this.props.dateAttributeEnd.status === "available") {
+                // update date end value if prop is different from widget, only needed if we use daterange
                 if (
                     prevProps.dateAttributeEnd !== this.props.dateAttributeEnd &&
                     this.props.dateAttributeEnd !== this.state.editedValueEnd
@@ -78,22 +65,30 @@ export class DatePickerContainer extends Component {
                     this.setState({ dateValueEnd: this.props.dateAttributeEnd.value });
                 }
             }
-        } else {
-            if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
-                if (this.state.dateValueStartInitial === null) {
-                    this.setState({ dateValueStartInitial: this.props.dateAttribute.value });
-                }
-                if (prevProps.dateAttribute.validation !== this.props.dateAttribute.validation) {
-                    this.setState({ validationFeedback: this.props.dateAttribute.validation });
-                }
-                if (
-                    prevProps.dateAttribute !== this.props.dateAttribute &&
-                    this.props.dateAttribute !== this.state.editedValueStart
-                ) {
-                    this.setState({ dateValueStart: this.props.dateAttribute.value });
-                }
+        }
+        if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
+            // set initial values, the end initial is set but not used if there is no range
+            if (this.state.dateValueStartInitial === null) {
+                this.setState({
+                    dateValueStartInitial: this.props.dateAttribute.value,
+                    dateValueEndInitial: this.props.dateAttributeEnd.value,
+                    readOnly: this.props.dateAttribute.readOnly
+                });
+            }
+            // set validation
+            if (prevProps.dateAttribute.validation !== this.props.dateAttribute.validation) {
+                this.setState({ validationFeedback: this.props.dateAttribute.validation });
+            }
+            // update date value if prop is different from widget
+            if (
+                prevProps.dateAttribute !== this.props.dateAttribute &&
+                this.props.dateAttribute !== this.state.editedValueStart
+            ) {
+                this.setState({ dateValueStart: this.props.dateAttribute.value });
             }
         }
+
+        // set placeholder
         if (this.props.placeholder && this.props.placeholder.status === "available") {
             if (this.state.placeholder !== this.props.placeholder.value) {
                 this.setState({ placeholder: this.props.placeholder.value });
@@ -101,6 +96,18 @@ export class DatePickerContainer extends Component {
         } else if (!this.props.placeholder) {
             if (this.state.placeholder !== this.state.dateFormat) {
                 this.setState({ placeholder: this.state.dateFormat });
+            }
+        }
+
+        // set min and max date
+        if (this.props.minDate && this.props.minDate.status === "available") {
+            if (this.state.minDate !== this.props.minDate.value) {
+                this.setState({ minDate: this.props.minDate.value });
+            }
+        }
+        if (this.props.maxDate && this.props.maxDate.status === "available") {
+            if (this.state.maxDate !== this.props.maxDate.value) {
+                this.setState({ maxDate: this.props.maxDate.value });
             }
         }
     }
@@ -167,6 +174,8 @@ export class DatePickerContainer extends Component {
                     dropdownMode="select"
                     readOnly={this.state.readOnly}
                     disabled={this.state.readOnly}
+                    minDate={this.state.minDate}
+                    maxDate={this.state.maxDate}
                 />
                 <button
                     type="button"

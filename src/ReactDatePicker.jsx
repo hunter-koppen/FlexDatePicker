@@ -17,6 +17,8 @@ export class ReactDatePicker extends Component {
                 dateRange={this.props.dateRange}
                 onEnterAction={this.onEnterHandler}
                 onLeaveAction={this.onLeaveHandler}
+                minDate={this.props.minDate}
+                maxDate={this.props.maxDate}
             />
         );
     }
