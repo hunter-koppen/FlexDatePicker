@@ -1,7 +1,5 @@
 import { Component, createElement } from "react";
 import { Alert } from "./Alert";
-import moment_ from "moment";
-const moment = moment_;
 
 import DatePicker from "react-datepicker";
 
@@ -54,7 +52,6 @@ export class DatePickerContainer extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.state);
         if (this.props.dateRange) {
             if (this.props.dateAttributeEnd && this.props.dateAttributeEnd.status === "available") {
                 // update date end value if prop is different from widget, only needed if we use daterange
@@ -114,29 +111,36 @@ export class DatePickerContainer extends Component {
 
     onChange = newDate => {
         if (this.props.dateRange) {
-            const newDateStart = newDate[0];
-            const newDateEnd = newDate[1];
+            const [newDateStart, newDateEnd] = newDate;
             this.setState({
                 dateValueStart: newDateStart,
                 dateValueEnd: newDateEnd,
                 editedValueStart: newDateStart,
                 editedValueEnd: newDateEnd
             });
-            if (this.isDate(newDateStart) === true) {
+            // Mendix will error if you try to push null into the datevalue
+            if (newDateStart === null) {
+                this.props.dateAttribute.setValue(undefined);
+            } else {
                 this.props.dateAttribute.setValue(newDateStart);
             }
-            if (this.isDate(newDateEnd) === true) {
+            if (newDateEnd === null) {
+                this.props.dateAttributeEnd.setValue(undefined);
+            } else {
                 this.props.dateAttributeEnd.setValue(newDateEnd);
             }
         } else {
             this.setState({ dateValueStart: newDate, editedValueStart: newDate });
-            if (this.isDate(newDate) === true) {
+            if (newDate === null) {
+                this.props.dateAttribute.setValue(undefined);
+            } else {
                 this.props.dateAttribute.setValue(newDate);
             }
         }
     };
 
     onBlur = () => {
+        // provide the initial and current values for the Mendix OnChange action
         this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
     };
 
@@ -144,10 +148,6 @@ export class DatePickerContainer extends Component {
         if (this.state.readOnly === false) {
             this.setState({ open: !this.state.open });
         }
-    };
-
-    isDate = date => {
-        return moment(date, this.state.dateFormat, true).isValid();
     };
 
     render() {
