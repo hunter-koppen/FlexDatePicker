@@ -11,8 +11,10 @@ export class ReactDatePicker extends Component {
         return (
             <DatePickerContainer
                 dateAttribute={this.props.dateAttribute}
+                dateAttributeEnd={this.props.dateAttributeEnd}
                 showWeekNumbers={this.props.showWeekNumbers}
                 placeholder={this.props.placeholder}
+                dateRange={this.props.dateRange}
                 onEnterAction={this.onEnterHandler}
                 onLeaveAction={this.onLeaveHandler}
             />

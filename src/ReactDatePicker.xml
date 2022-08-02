@@ -8,9 +8,20 @@
     <properties>
         <propertyGroup caption="General">
             <propertyGroup caption="Datasource">
+                <property key="dateRange" type="boolean" defaultValue="false">
+                    <caption>Date range?</caption>
+                    <description/>
+                </property>
                 <property key="dateAttribute" type="attribute" required="true">
                     <caption>Attribute</caption>
                     <description>The date attribute to store the date in.</description>
+                    <attributeTypes>
+                        <attributeType name="DateTime"/>
+                    </attributeTypes>
+                </property>
+                <property key="dateAttributeEnd" type="attribute" required="false">
+                    <caption>End Range Attribute</caption>
+                    <description>Value of the end of the range.</description>
                     <attributeTypes>
                         <attributeType name="DateTime"/>
                     </attributeTypes>

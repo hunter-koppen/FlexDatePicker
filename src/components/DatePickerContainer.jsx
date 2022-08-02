@@ -8,9 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export class DatePickerContainer extends Component {
     state = {
-        dateValue: null,
-        dateValueInitial: null,
-        editedvalue: null,
+        dateValueStart: null,
+        dateValueStartInitial: null,
+        dateValueEnd: null,
+        dateValueEndInitial: null,
+        editedValueStart: null,
+        editedValueEnd: null,
         placeholder: null,
         firstDayOfWeek: null,
         locale: null,
@@ -46,15 +49,39 @@ export class DatePickerContainer extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
-            if (this.state.dateValueInitial === null) {
-                this.setState({ dateValueInitial: this.props.dateAttribute.value });
+        console.log(this.state);
+        if (this.props.dateRange) {
+            if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
+                if (this.state.dateValueStartInitial === null) {
+                    this.setState({
+                        dateValueStartInitial: this.props.dateAttribute.value,
+                        dateValueEndInitial: this.props.dateAttributeEnd.value
+                    });
+                }
+                if (
+                    prevProps.dateAttribute !== this.props.dateAttribute &&
+                    this.props.dateAttribute !== this.state.editedValueStart
+                ) {
+                    this.setState({ dateValueStart: this.props.dateAttribute.value });
+                }
+                if (
+                    prevProps.dateAttributeEnd !== this.props.dateAttributeEnd &&
+                    this.props.dateAttributeEnd !== this.state.editedValueEnd
+                ) {
+                    this.setState({ dateValueEnd: this.props.dateAttributeEnd.value });
+                }
             }
-            if (
-                prevProps.dateAttribute !== this.props.dateAttribute &&
-                this.props.dateAttribute !== this.state.editedvalue
-            ) {
-                this.setState({ dateValue: this.props.dateAttribute.value });
+        } else {
+            if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
+                if (this.state.dateValueStartInitial === null) {
+                    this.setState({ dateValueStartInitial: this.props.dateAttribute.value });
+                }
+                if (
+                    prevProps.dateAttribute !== this.props.dateAttribute &&
+                    this.props.dateAttribute !== this.state.editedValueStart
+                ) {
+                    this.setState({ dateValueStart: this.props.dateAttribute.value });
+                }
             }
         }
         if (this.props.placeholder && this.props.placeholder.status === "available") {
@@ -68,15 +95,27 @@ export class DatePickerContainer extends Component {
         }
     }
 
-    onChange = newDate => {
-        this.setState({ dateValue: newDate, editedvalue: newDate });
-        if (this.isDate(newDate) === true) {
-            this.props.dateAttribute.setValue(newDate);
+    onChange = (newDate) => {
+        if (this.props.dateRange) {
+            const newDateStart = newDate[0];
+            const newDateEnd = newDate[1];
+            this.setState({ dateValueStart: newDateStart, dateValueEnd: newDateEnd, editedValueStart: newDateStart, editedValueEnd: newDateEnd });
+            if (this.isDate(newDateStart) === true) {
+                this.props.dateAttribute.setValue(newDateStart);
+            }
+            if (this.isDate(newDateEnd) === true) {
+                this.props.dateAttributeEnd.setValue(newDateEnd);
+            }
+        } else {
+            this.setState({ dateValueStart: newDate, editedValueStart: newDate });
+            if (this.isDate(newDate) === true) {
+                this.props.dateAttribute.setValue(newDate);
+            }
         }
     };
 
     onBlur = () => {
-        this.props.onLeaveAction(this.state.dateValueInitial, this.state.dateValue);
+        this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
     };
 
     togglePicker = () => {
@@ -91,7 +130,10 @@ export class DatePickerContainer extends Component {
         return (
             <div className="mx-compound-control" onFocus={this.props.onEnterAction} onBlur={this.onBlur}>
                 <DatePicker
-                    selected={this.state.dateValue}
+                    selected={this.state.dateValueStart}
+                    selectsRange={this.props.dateRange}
+                    startDate={this.state.dateValueStart}
+                    endDate={this.state.dateValueEnd}
                     onChange={this.onChange}
                     showWeekNumbers={this.props.showWeekNumbers}
                     placeholderText={this.state.placeholder}

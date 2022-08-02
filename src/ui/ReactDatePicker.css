@@ -10,7 +10,7 @@
     background: #f8f8f8;
 }
 
-.react-datepicker__day--today:not(.react-datepicker__day--in-range),
+.react-datepicker .react-datepicker__day--today:not(.react-datepicker__day--in-range),
 .react-datepicker__day--keyboard-selected {
     background-color: #e5e5e5;
 }
