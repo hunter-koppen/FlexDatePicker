@@ -1,4 +1,5 @@
 import { Component, createElement } from "react";
+import { Alert } from "./Alert";
 import moment_ from "moment";
 const moment = moment_;
 
@@ -19,7 +20,8 @@ export class DatePickerContainer extends Component {
         locale: null,
         open: false,
         dateFormat: null,
-        readOnly: false
+        readOnly: false,
+        validationFeedback: null
     };
 
     componentDidMount() {
@@ -53,13 +55,15 @@ export class DatePickerContainer extends Component {
         console.log(this.state);
         if (this.props.dateRange) {
             if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
-                console.log(this.dateAttribute);
                 if (this.state.dateValueStartInitial === null) {
                     this.setState({
                         dateValueStartInitial: this.props.dateAttribute.value,
                         dateValueEndInitial: this.props.dateAttributeEnd.value,
                         readOnly: this.props.dateAttribute.readOnly
                     });
+                }
+                if (prevProps.dateAttribute.validation !== this.props.dateAttribute.validation) {
+                    this.setState({ validationFeedback: this.props.dateAttribute.validation });
                 }
                 if (
                     prevProps.dateAttribute !== this.props.dateAttribute &&
@@ -78,6 +82,9 @@ export class DatePickerContainer extends Component {
             if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
                 if (this.state.dateValueStartInitial === null) {
                     this.setState({ dateValueStartInitial: this.props.dateAttribute.value });
+                }
+                if (prevProps.dateAttribute.validation !== this.props.dateAttribute.validation) {
+                    this.setState({ validationFeedback: this.props.dateAttribute.validation });
                 }
                 if (
                     prevProps.dateAttribute !== this.props.dateAttribute &&
@@ -161,9 +168,22 @@ export class DatePickerContainer extends Component {
                     readOnly={this.state.readOnly}
                     disabled={this.state.readOnly}
                 />
-                <button type="button" class="btn mx-button" tabindex="-1" disabled={this.state.readOnly} onClick={this.togglePicker}>
+                <button
+                    type="button"
+                    class="btn mx-button"
+                    tabindex="-1"
+                    disabled={this.state.readOnly}
+                    onClick={this.togglePicker}
+                >
                     <span class="glyphicon glyphicon-calendar"></span>
                 </button>
+                <Alert
+                    bootstrapStyle={"danger"}
+                    message={this.state.validationFeedback}
+                    className={"mx-validation-message"}
+                >
+                    {this.state.validationFeedback}
+                </Alert>
             </div>
         );
     }
