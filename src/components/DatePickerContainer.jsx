@@ -18,7 +18,8 @@ export class DatePickerContainer extends Component {
         firstDayOfWeek: null,
         locale: null,
         open: false,
-        dateFormat: null
+        dateFormat: null,
+        readOnly: false
     };
 
     componentDidMount() {
@@ -52,10 +53,12 @@ export class DatePickerContainer extends Component {
         console.log(this.state);
         if (this.props.dateRange) {
             if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
+                console.log(this.dateAttribute);
                 if (this.state.dateValueStartInitial === null) {
                     this.setState({
                         dateValueStartInitial: this.props.dateAttribute.value,
-                        dateValueEndInitial: this.props.dateAttributeEnd.value
+                        dateValueEndInitial: this.props.dateAttributeEnd.value,
+                        readOnly: this.props.dateAttribute.readOnly
                     });
                 }
                 if (
@@ -95,11 +98,16 @@ export class DatePickerContainer extends Component {
         }
     }
 
-    onChange = (newDate) => {
+    onChange = newDate => {
         if (this.props.dateRange) {
             const newDateStart = newDate[0];
             const newDateEnd = newDate[1];
-            this.setState({ dateValueStart: newDateStart, dateValueEnd: newDateEnd, editedValueStart: newDateStart, editedValueEnd: newDateEnd });
+            this.setState({
+                dateValueStart: newDateStart,
+                dateValueEnd: newDateEnd,
+                editedValueStart: newDateStart,
+                editedValueEnd: newDateEnd
+            });
             if (this.isDate(newDateStart) === true) {
                 this.props.dateAttribute.setValue(newDateStart);
             }
@@ -119,7 +127,9 @@ export class DatePickerContainer extends Component {
     };
 
     togglePicker = () => {
-        this.setState({ open: !this.state.open });
+        if (this.state.readOnly === false) {
+            this.setState({ open: !this.state.open });
+        }
     };
 
     isDate = date => {
@@ -148,8 +158,10 @@ export class DatePickerContainer extends Component {
                     showYearDropdown={true}
                     showMonthDropdown={true}
                     dropdownMode="select"
+                    readOnly={this.state.readOnly}
+                    disabled={this.state.readOnly}
                 />
-                <button type="button" class="btn mx-button" tabindex="-1" onClick={this.togglePicker}>
+                <button type="button" class="btn mx-button" tabindex="-1" disabled={this.state.readOnly} onClick={this.togglePicker}>
                     <span class="glyphicon glyphicon-calendar"></span>
                 </button>
             </div>
