@@ -1,8 +1,8 @@
 {
-  "name": "reactdatepicker",
-  "widgetName": "ReactDatePicker",
+  "name": "clevrdatepicker",
+  "widgetName": "ClevrDatePicker",
   "version": "1.0.0",
-  "description": "My widget description",
+  "description": "",
   "copyright": "CLEVR NL B.V. 2022",
   "author": "Hunter Koppen",
   "engines": {

@@ -1,9 +1,9 @@
 import { Component, createElement } from "react";
 
-import { DatePickerContainer } from "./components/DatePickerContainer";
+import { ReactDatePicker } from "./components/ReactDatePicker";
 import "./ui/ReactDatePicker.css";
 
-export class ReactDatePicker extends Component {
+export class ClevrDatePicker extends Component {
     onEnterHandler = this.onEnter.bind(this);
     onLeaveHandler = this.onLeave.bind(this);
 
@@ -15,7 +15,7 @@ export class ReactDatePicker extends Component {
 
     render() {
         return (
-            <DatePickerContainer
+            <ReactDatePicker
                 dateAttribute={this.props.dateAttribute}
                 dateAttributeEnd={this.props.dateAttributeEnd}
                 showWeekNumbers={this.props.showWeekNumbers}

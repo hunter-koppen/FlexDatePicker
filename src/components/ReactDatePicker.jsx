@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 const nodeRef = React.createRef();
 
-export class DatePickerContainer extends Component {
+export class ReactDatePicker extends Component {
     state = {
         dateValueStart: null,
         dateValueStartInitial: null,
