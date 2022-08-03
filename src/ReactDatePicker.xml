@@ -43,6 +43,20 @@
             <propertyGroup caption="Visibility">
                 <systemProperty key="Visibility"/>
             </propertyGroup>
+            <propertyGroup caption="Validation">
+                <property key="required" type="boolean" defaultValue="false">
+                    <caption>Required</caption>
+                    <description/>
+                </property>
+                <property key="requiredMessage" type="textTemplate" required="false">
+                    <caption>Required message</caption>
+                    <description/>
+                    <translations>
+                        <translation lang="en_US">Field is required</translation>
+                        <translation lang="nl_NL">Veld is verplicht</translation>
+                    </translations>
+                </property>
+            </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Settings">
             <propertyGroup caption="Weeknumbers">

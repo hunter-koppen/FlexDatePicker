@@ -22,7 +22,7 @@ export class DatePickerContainer extends Component {
         readOnly: false,
         validationFeedback: null,
         minDate: null,
-        maxDate: null
+        maxDate: null,
     };
 
     componentDidMount() {
@@ -123,21 +123,21 @@ export class DatePickerContainer extends Component {
                 editedValueEnd: newDateEnd
             });
             // Mendix will error if you try to push null into the datevalue
-            if (newDateStart === null) {
+            if (newDateStart === null && this.props.dateAttribute !== undefined) {
                 this.props.dateAttribute.setValue(undefined);
-            } else {
+            } else if (this.props.dateAttribute !== newDateStart) {
                 this.props.dateAttribute.setValue(newDateStart);
             }
-            if (newDateEnd === null) {
+            if (newDateEnd === null && this.props.dateAttributeEnd !== undefined) {
                 this.props.dateAttributeEnd.setValue(undefined);
-            } else {
+            } else if (this.props.dateAttributeEnd !== newDateEnd) {
                 this.props.dateAttributeEnd.setValue(newDateEnd);
             }
         } else {
             this.setState({ dateValueStart: newDate, editedValueStart: newDate });
-            if (newDate === null) {
+            if (newDate === null && this.props.dateAttribute !== undefined) {
                 this.props.dateAttribute.setValue(undefined);
-            } else {
+            } else if (this.props.dateAttribute !== newDate) {
                 this.props.dateAttribute.setValue(newDate);
             }
         }
@@ -158,6 +158,7 @@ export class DatePickerContainer extends Component {
         return (
             <div className="mx-compound-control" onFocus={this.props.onEnterAction} onBlur={this.onBlur} ref={nodeRef}>
                 <DatePicker
+                    tabIndex={this.props.tabIndex}
                     selected={this.state.dateValueStart}
                     selectsRange={this.props.dateRange}
                     startDate={this.state.dateValueStart}

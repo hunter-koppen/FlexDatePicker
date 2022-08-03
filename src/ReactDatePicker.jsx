@@ -7,6 +7,12 @@ export class ReactDatePicker extends Component {
     onEnterHandler = this.onEnter.bind(this);
     onLeaveHandler = this.onLeave.bind(this);
 
+    componentDidMount() {
+        if (this.props.required) {
+            this.props.dateAttribute.setValidator(this.validator);
+        }
+    }
+
     render() {
         return (
             <DatePickerContainer
@@ -27,6 +33,7 @@ export class ReactDatePicker extends Component {
         if (this.props.onEnterAction && this.props.onEnterAction.canExecute) {
             this.props.onEnterAction.execute();
         }
+
     }
 
     onLeave(initialvalue, currentvalue) {
@@ -43,4 +50,12 @@ export class ReactDatePicker extends Component {
             }
         }
     }
+
+    validator = value => {
+        const { requiredMessage } = this.props;
+        if (requiredMessage && requiredMessage.value && !value) {
+            return requiredMessage.value;
+        }
+        return;
+    };
 }
