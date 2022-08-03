@@ -25,6 +25,7 @@ export class ClevrDatePicker extends Component {
                 onLeaveAction={this.onLeaveHandler}
                 minDate={this.props.minDate}
                 maxDate={this.props.maxDate}
+                pickerType={this.props.pickerType}
             />
         );
     }

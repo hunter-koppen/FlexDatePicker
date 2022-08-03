@@ -19,6 +19,7 @@ export class ReactDatePicker extends Component {
         locale: null,
         open: false,
         dateFormat: null,
+        timeFormat: null,
         readOnly: false,
         validationFeedback: null,
         minDate: null,
@@ -48,10 +49,35 @@ export class ReactDatePicker extends Component {
             match: {}
         };
 
+        let dateFormat = null;
+        let timeFormat = null;
+        switch (this.props.pickerType) {
+            case "date":
+                dateFormat = mx.session.sessionData.locale.patterns.date;
+                break;
+            case "time":
+                dateFormat = mx.session.sessionData.locale.patterns.time;
+                timeFormat = mx.session.sessionData.locale.patterns.time;
+                break;
+            case "datetime":
+                dateFormat = mx.session.sessionData.locale.patterns.datetime;
+                timeFormat = mx.session.sessionData.locale.patterns.time;
+                break;
+            case "month":
+                dateFormat = "MMMM";
+                break;
+            case "year":
+                dateFormat = "yyyy";
+                break;
+            default:
+                dateFormat = mx.session.sessionData.locale.patterns.date;
+        }
+
         this.setState({
             firstDayOfWeek: mx.session.sessionData.locale.firstDayOfWeek,
-            locale: locale,
-            dateFormat: mx.session.sessionData.locale.patterns.date
+            locale,
+            dateFormat,
+            timeFormat
         });
     }
 
@@ -67,7 +93,7 @@ export class ReactDatePicker extends Component {
                 }
                 if (this.state.dateValueEndInitial === null) {
                     this.setState({
-                        dateValueEndInitial: this.props.dateAttributeEnd.value,
+                        dateValueEndInitial: this.props.dateAttributeEnd.value
                     });
                 }
             }
@@ -99,8 +125,10 @@ export class ReactDatePicker extends Component {
                 this.setState({ placeholder: this.props.placeholder.value });
             }
         } else if (!this.props.placeholder) {
-            if (this.state.placeholder !== this.state.dateFormat) {
-                this.setState({ placeholder: this.state.dateFormat });
+            const dateFormat = this.state.dateFormat;
+            const placeholder = dateFormat.toLowerCase();
+            if (this.state.placeholder !== placeholder) {
+                this.setState({ placeholder });
             }
         }
 
@@ -176,8 +204,6 @@ export class ReactDatePicker extends Component {
                     onClickOutside={this.togglePicker}
                     open={this.state.open}
                     className="form-control"
-                    dateFormat={this.state.dateFormat}
-                    dateFormatCalendar="MMMM"
                     showYearDropdown={true}
                     showMonthDropdown={true}
                     dropdownMode="select"
@@ -185,6 +211,15 @@ export class ReactDatePicker extends Component {
                     disabled={this.state.readOnly}
                     minDate={this.state.minDate}
                     maxDate={this.state.maxDate}
+                    dateFormat={this.state.dateFormat}
+                    dateFormatCalendar="MMMM"
+                    timeFormat={this.state.timeFormat}
+                    timeCaption="Time"
+                    showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
+                    showTimeSelectOnly={this.props.pickerType === "time"}
+                    timeIntervals={15}
+                    showMonthYearPicker={this.props.pickerType === "month"}
+                    showYearPicker={this.props.pickerType === "year"}
                 />
                 <button
                     type="button"

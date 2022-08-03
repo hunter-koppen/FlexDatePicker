@@ -59,6 +59,20 @@
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Settings">
+            <propertyGroup caption="Picker">
+                <property key="pickerType" type="enumeration" defaultValue="date">
+                    <caption>Picker type</caption>
+                    <description>Which type of datepicker should the popup show</description>
+                    <enumerationValues>
+                        <enumerationValue key="date">Date</enumerationValue>
+                        <enumerationValue key="time">Time</enumerationValue>
+                        <enumerationValue key="datetime">Datetime</enumerationValue>
+                        <enumerationValue key="month">Month</enumerationValue>
+                        <enumerationValue key="year">Year</enumerationValue>
+                    </enumerationValues>
+                </property>
+
+            </propertyGroup>
             <propertyGroup caption="Weeknumbers">
                 <property key="showWeekNumbers" type="boolean" defaultValue="false">
                     <caption>Show Week Numbers?</caption>
