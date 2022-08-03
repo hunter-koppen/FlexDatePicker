@@ -33,7 +33,6 @@ export class ReactDatePicker extends Component {
         if (this.props.onEnterAction && this.props.onEnterAction.canExecute) {
             this.props.onEnterAction.execute();
         }
-
     }
 
     onLeave(initialvalue, currentvalue) {

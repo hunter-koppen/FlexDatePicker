@@ -22,7 +22,7 @@ export class DatePickerContainer extends Component {
         readOnly: false,
         validationFeedback: null,
         minDate: null,
-        maxDate: null,
+        maxDate: null
     };
 
     componentDidMount() {
