@@ -65,6 +65,11 @@ export class ReactDatePicker extends Component {
                 ) {
                     this.setState({ dateValueEnd: this.props.dateAttributeEnd.value });
                 }
+                if (this.state.dateValueEndInitial === null) {
+                    this.setState({
+                        dateValueEndInitial: this.props.dateAttributeEnd.value,
+                    });
+                }
             }
         }
         if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
@@ -72,7 +77,6 @@ export class ReactDatePicker extends Component {
             if (this.state.dateValueStartInitial === null) {
                 this.setState({
                     dateValueStartInitial: this.props.dateAttribute.value,
-                    dateValueEndInitial: this.props.dateAttributeEnd.value,
                     readOnly: this.props.dateAttribute.readOnly
                 });
             }
