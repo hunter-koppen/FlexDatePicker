@@ -21,3 +21,5 @@ Configurable icon
 Overwrite format
 Allow other types of pickers
 Show 2 months option
+Disable weekends
+Highlight days
