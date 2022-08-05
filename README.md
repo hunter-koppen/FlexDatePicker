@@ -23,3 +23,7 @@ The required validation and any other validation actions in nanoflows/microflows
 
 ## Issues, suggestions and feature requests
 https://github.com/hunterkoppenclevr/Clevr-DatePicker/issues
+
+## To do
+Configurable icon
+Overwrite format
