@@ -14,12 +14,3 @@ Simply drag the widget on a page with a date attribute and attach it to the widg
 
 ## Issues, suggestions and feature requests
 https://github.com/hunterkoppenclevr/Clevr-DatePicker/issues
-
-
-## To do
-Configurable icon
-Overwrite format
-Allow other types of pickers
-Show 2 months option
-Disable weekends
-Highlight days
