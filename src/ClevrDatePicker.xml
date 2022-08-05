@@ -120,16 +120,16 @@
                     <description>Time interval in minutes</description>
                 </property>
             </propertyGroup>
-        </propertyGroup>
-        <propertyGroup caption="Translations">
-            <property key="timeTranslation" type="textTemplate" required="true">
-                <caption>Time</caption>
-                <description/>
-                <translations>
-                    <translation lang="en_US">Time</translation>
-                    <translation lang="nl_NL">Tijd</translation>
-                </translations>
-            </property>
+            <propertyGroup caption="Translation">
+                <property key="timeTranslation" type="textTemplate" required="true">
+                    <caption>Time</caption>
+                    <description/>
+                    <translations>
+                        <translation lang="en_US">Time</translation>
+                        <translation lang="nl_NL">Tijd</translation>
+                    </translations>
+                </property>
+            </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Events">
             <property key="onEnterAction" type="action" required="false">

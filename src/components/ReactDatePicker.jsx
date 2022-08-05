@@ -2,7 +2,7 @@ import React, { Component, createElement } from "react";
 import { Alert } from "./Alert";
 
 import DatePicker from "react-datepicker";
-import {setMinutes, setHours} from "date-fns";
+import { setHours, setMinutes } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 const nodeRef = React.createRef();
 const now = new Date();
@@ -177,23 +177,27 @@ export class ReactDatePicker extends Component {
 
     onChange = newDate => {
         if (this.props.dateRange) {
-            const [newDateStart, newDateEnd] = newDate;
-            this.setState({
-                dateValueStart: newDateStart,
-                dateValueEnd: newDateEnd,
-                editedValueStart: newDateStart,
-                editedValueEnd: newDateEnd
-            });
-            // Mendix will error if you try to push null into the datevalue
-            if (newDateStart === null && this.props.dateAttribute !== undefined) {
-                this.props.dateAttribute.setValue(undefined);
-            } else if (this.props.dateAttribute !== newDateStart) {
-                this.props.dateAttribute.setValue(newDateStart);
-            }
-            if (newDateEnd === null && this.props.dateAttributeEnd !== undefined) {
-                this.props.dateAttributeEnd.setValue(undefined);
-            } else if (this.props.dateAttributeEnd !== newDateEnd) {
-                this.props.dateAttributeEnd.setValue(newDateEnd);
+            if (this.props.pickerType === "time" || this.props.pickerType === "datetime") {
+                console.error("cannot use date range and time picker at the same time");
+            } else {
+                const [newDateStart, newDateEnd] = newDate;
+                this.setState({
+                    dateValueStart: newDateStart,
+                    dateValueEnd: newDateEnd,
+                    editedValueStart: newDateStart,
+                    editedValueEnd: newDateEnd
+                });
+                // Mendix will error if you try to push null into the datevalue
+                if (newDateStart === null && this.props.dateAttribute !== undefined) {
+                    this.props.dateAttribute.setValue(undefined);
+                } else if (this.props.dateAttribute !== newDateStart) {
+                    this.props.dateAttribute.setValue(newDateStart);
+                }
+                if (newDateEnd === null && this.props.dateAttributeEnd !== undefined) {
+                    this.props.dateAttributeEnd.setValue(undefined);
+                } else if (this.props.dateAttributeEnd !== newDateEnd) {
+                    this.props.dateAttributeEnd.setValue(newDateEnd);
+                }
             }
         } else {
             this.setState({ dateValueStart: newDate, editedValueStart: newDate });
@@ -206,8 +210,10 @@ export class ReactDatePicker extends Component {
     };
 
     onSelect = () => {
-        this.setState({ open: false });
-    }
+        if (!this.props.dateRange) {
+            this.setState({ open: false });
+        }
+    };
 
     onBlur = () => {
         // provide the initial and current values for the Mendix OnChange action

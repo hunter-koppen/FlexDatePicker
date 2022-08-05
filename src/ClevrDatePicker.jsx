@@ -62,6 +62,5 @@ export class ClevrDatePicker extends Component {
         if (requiredMessage && requiredMessage.value && !value) {
             return requiredMessage.value;
         }
-        return;
     };
 }
