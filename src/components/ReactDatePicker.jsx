@@ -55,26 +55,32 @@ export class ReactDatePicker extends Component {
 
         let dateFormat = null;
         let timeFormat = null;
-        switch (this.props.pickerType) {
-            case "date":
-                dateFormat = mx.session.sessionData.locale.patterns.date;
-                break;
-            case "time":
-                dateFormat = mx.session.sessionData.locale.patterns.time;
-                timeFormat = mx.session.sessionData.locale.patterns.time;
-                break;
-            case "datetime":
-                dateFormat = mx.session.sessionData.locale.patterns.datetime;
-                timeFormat = mx.session.sessionData.locale.patterns.time;
-                break;
-            case "month":
-                dateFormat = "MMMM";
-                break;
-            case "year":
-                dateFormat = "yyyy";
-                break;
-            default:
-                dateFormat = mx.session.sessionData.locale.patterns.date;
+        if (this.props.customFormat) {
+            console.log(this.props.customFormat)
+            dateFormat = this.props.customFormat;
+            timeFormat = this.props.customFormat;
+        } else {
+            switch (this.props.pickerType) {
+                case "date":
+                    dateFormat = mx.session.sessionData.locale.patterns.date;
+                    break;
+                case "time":
+                    dateFormat = mx.session.sessionData.locale.patterns.time;
+                    timeFormat = mx.session.sessionData.locale.patterns.time;
+                    break;
+                case "datetime":
+                    dateFormat = mx.session.sessionData.locale.patterns.datetime;
+                    timeFormat = mx.session.sessionData.locale.patterns.time;
+                    break;
+                case "month":
+                    dateFormat = "MMMM";
+                    break;
+                case "year":
+                    dateFormat = "yyyy";
+                    break;
+                default:
+                    dateFormat = mx.session.sessionData.locale.patterns.date;
+            }
         }
 
         let firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;

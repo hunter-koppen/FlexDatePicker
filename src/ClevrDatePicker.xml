@@ -39,6 +39,10 @@
                         <enumerationValue key="year">Year</enumerationValue>
                     </enumerationValues>
                 </property>
+                <property key="customFormat" type="string" required="false">
+                    <caption>Custom format</caption>
+                    <description>Overwrite the default locale settings with a custom format</description>
+                </property>
             </propertyGroup>
             <propertyGroup caption="Placeholder">
                 <property key="placeholder" type="expression" defaultValue="" required="false">

@@ -32,6 +32,7 @@ export class ClevrDatePicker extends Component {
                 timeInterval={this.props.timeInterval}
                 minTime={this.props.minTime}
                 maxTime={this.props.maxTime}
+                customFormat={this.props.customFormat}
             />
         );
     }
