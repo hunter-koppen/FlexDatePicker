@@ -2,9 +2,10 @@ import React, { Component, createElement } from "react";
 import { Alert } from "./Alert";
 
 import DatePicker from "react-datepicker";
-
+import {setMinutes, setHours} from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 const nodeRef = React.createRef();
+const now = new Date();
 
 export class ReactDatePicker extends Component {
     state = {
@@ -15,7 +16,7 @@ export class ReactDatePicker extends Component {
         editedValueStart: null,
         editedValueEnd: null,
         placeholder: null,
-        firstDayOfWeek: null,
+        firstDayOfTheWeek: null,
         locale: null,
         open: false,
         dateFormat: null,
@@ -23,7 +24,10 @@ export class ReactDatePicker extends Component {
         readOnly: false,
         validationFeedback: null,
         minDate: null,
-        maxDate: null
+        maxDate: null,
+        minTime: setHours(setMinutes(now, 0), 0),
+        maxTime: setHours(setMinutes(now, 59), 23),
+        timeTranslation: null
     };
 
     componentDidMount() {
@@ -73,8 +77,13 @@ export class ReactDatePicker extends Component {
                 dateFormat = mx.session.sessionData.locale.patterns.date;
         }
 
+        let firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
+        if (this.props.overwriteFirstDay && this.props.firstDayOfTheWeek >= 0 && this.props.firstDayOfTheWeek <= 6) {
+            firstDayOfTheWeek = this.props.firstDayOfTheWeek;
+        }
+
         this.setState({
-            firstDayOfWeek: mx.session.sessionData.locale.firstDayOfWeek,
+            firstDayOfTheWeek,
             locale,
             dateFormat,
             timeFormat
@@ -132,7 +141,7 @@ export class ReactDatePicker extends Component {
             }
         }
 
-        // set min and max date
+        // set min and max date/time
         if (this.props.minDate && this.props.minDate.status === "available") {
             if (this.state.minDate !== this.props.minDate.value) {
                 this.setState({ minDate: this.props.minDate.value });
@@ -141,6 +150,27 @@ export class ReactDatePicker extends Component {
         if (this.props.maxDate && this.props.maxDate.status === "available") {
             if (this.state.maxDate !== this.props.maxDate.value) {
                 this.setState({ maxDate: this.props.maxDate.value });
+            }
+        }
+        if (this.props.minTime && this.props.minTime.status === "available") {
+            const minTimeString = this.props.minTime.value;
+            const minTime = setHours(setMinutes(now, minTimeString.substring(3, 5)), minTimeString.substring(0, 2));
+            if (this.state.minTime.getTime() !== minTime.getTime()) {
+                this.setState({ minTime });
+            }
+        }
+        if (this.props.maxTime && this.props.maxTime.status === "available") {
+            const maxTimeString = this.props.maxTime.value;
+            const maxTime = setHours(setMinutes(now, maxTimeString.substring(3, 5)), maxTimeString.substring(0, 2));
+            if (this.state.maxTime.getTime() !== maxTime.getTime()) {
+                this.setState({ maxTime });
+            }
+        }
+
+        // set translations
+        if (this.props.timeTranslation && this.props.timeTranslation.status === "available") {
+            if (this.state.timeTranslation !== this.props.timeTranslation.value) {
+                this.setState({ timeTranslation: this.props.timeTranslation.value });
             }
         }
     }
@@ -175,6 +205,10 @@ export class ReactDatePicker extends Component {
         }
     };
 
+    onSelect = () => {
+        this.setState({ open: false });
+    }
+
     onBlur = () => {
         // provide the initial and current values for the Mendix OnChange action
         this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
@@ -196,9 +230,10 @@ export class ReactDatePicker extends Component {
                     startDate={this.state.dateValueStart}
                     endDate={this.state.dateValueEnd}
                     onChange={this.onChange}
+                    onSelect={this.onSelect}
                     showWeekNumbers={this.props.showWeekNumbers}
                     placeholderText={this.state.placeholder}
-                    calendarStartDay={this.state.firstDayOfWeek}
+                    calendarStartDay={this.state.firstDayOfTheWeek}
                     locale={this.state.locale}
                     showPopperArrow={false}
                     onClickOutside={this.togglePicker}
@@ -214,12 +249,15 @@ export class ReactDatePicker extends Component {
                     dateFormat={this.state.dateFormat}
                     dateFormatCalendar="MMMM"
                     timeFormat={this.state.timeFormat}
-                    timeCaption="Time"
+                    timeCaption={this.state.timeTranslation}
+                    timeIntervals={this.props.timeInterval}
+                    minTime={this.state.minTime}
+                    maxTime={this.state.maxTime}
                     showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
                     showTimeSelectOnly={this.props.pickerType === "time"}
-                    timeIntervals={15}
                     showMonthYearPicker={this.props.pickerType === "month"}
                     showYearPicker={this.props.pickerType === "year"}
+                    disabledKeyboardNavigation={true}
                 />
                 <button
                     type="button"

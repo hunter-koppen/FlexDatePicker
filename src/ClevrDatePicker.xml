@@ -27,6 +27,19 @@
                     </attributeTypes>
                 </property>
             </propertyGroup>
+            <propertyGroup caption="Picker">
+                <property key="pickerType" type="enumeration" defaultValue="date">
+                    <caption>Picker type</caption>
+                    <description>Which type of datepicker should the popup show</description>
+                    <enumerationValues>
+                        <enumerationValue key="date">Date</enumerationValue>
+                        <enumerationValue key="time">Time</enumerationValue>
+                        <enumerationValue key="datetime">Datetime</enumerationValue>
+                        <enumerationValue key="month">Month</enumerationValue>
+                        <enumerationValue key="year">Year</enumerationValue>
+                    </enumerationValues>
+                </property>
+            </propertyGroup>
             <propertyGroup caption="Placeholder">
                 <property key="placeholder" type="expression" defaultValue="" required="false">
                     <caption>Placeholder</caption>
@@ -58,25 +71,21 @@
                 </property>
             </propertyGroup>
         </propertyGroup>
-        <propertyGroup caption="Settings">
-            <propertyGroup caption="Picker">
-                <property key="pickerType" type="enumeration" defaultValue="date">
-                    <caption>Picker type</caption>
-                    <description>Which type of datepicker should the popup show</description>
-                    <enumerationValues>
-                        <enumerationValue key="date">Date</enumerationValue>
-                        <enumerationValue key="time">Time</enumerationValue>
-                        <enumerationValue key="datetime">Datetime</enumerationValue>
-                        <enumerationValue key="month">Month</enumerationValue>
-                        <enumerationValue key="year">Year</enumerationValue>
-                    </enumerationValues>
-                </property>
-
-            </propertyGroup>
+        <propertyGroup caption="Date settings">
             <propertyGroup caption="Weeknumbers">
                 <property key="showWeekNumbers" type="boolean" defaultValue="false">
                     <caption>Show Week Numbers?</caption>
                     <description/>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="First day of the week">
+                <property key="overwriteFirstDay" type="boolean" defaultValue="false">
+                    <caption>Overwrite first day</caption>
+                    <description>Overwrite first day of the week setting?</description>
+                </property>
+                <property key="firstDayOfTheWeek" type="integer" defaultValue="1">
+                    <caption>First day</caption>
+                    <description>0 = sunday, 1 = monday etc.</description>
                 </property>
             </propertyGroup>
             <propertyGroup caption="Disable dates">
@@ -91,6 +100,36 @@
                     <returnType type="DateTime" />
                 </property>
             </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Time settings">
+            <propertyGroup caption="Time range">
+                <property key="minTime" type="expression" defaultValue="" required="false">
+                    <caption>Min time</caption>
+                    <description>Minimal time to show in the picker HH:mm format (eg. 08:00).</description>
+                    <returnType type="String" />
+                </property>
+                <property key="maxTime" type="expression" defaultValue="" required="false">
+                    <caption>Max time</caption>
+                    <description>Maximum time to show in the picker in HH:mm format (eg. 17:00).</description>
+                    <returnType type="String" />
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Interval">
+                <property key="timeInterval" type="integer" defaultValue="15">
+                    <caption>Time interval</caption>
+                    <description>Time interval in minutes</description>
+                </property>
+            </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Translations">
+            <property key="timeTranslation" type="textTemplate" required="true">
+                <caption>Time</caption>
+                <description/>
+                <translations>
+                    <translation lang="en_US">Time</translation>
+                    <translation lang="nl_NL">Tijd</translation>
+                </translations>
+            </property>
         </propertyGroup>
         <propertyGroup caption="Events">
             <property key="onEnterAction" type="action" required="false">

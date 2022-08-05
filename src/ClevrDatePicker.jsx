@@ -1,7 +1,7 @@
 import { Component, createElement } from "react";
 
 import { ReactDatePicker } from "./components/ReactDatePicker";
-import "./ui/ReactDatePicker.css";
+import "./ui/ReactDatePicker.scss";
 
 export class ClevrDatePicker extends Component {
     onEnterHandler = this.onEnter.bind(this);
@@ -26,6 +26,12 @@ export class ClevrDatePicker extends Component {
                 minDate={this.props.minDate}
                 maxDate={this.props.maxDate}
                 pickerType={this.props.pickerType}
+                overwriteFirstDay={this.props.overwriteFirstDay}
+                firstDayOfTheWeek={this.props.firstDayOfTheWeek}
+                timeTranslation={this.props.timeTranslation}
+                timeInterval={this.props.timeInterval}
+                minTime={this.props.minTime}
+                maxTime={this.props.maxTime}
             />
         );
     }
