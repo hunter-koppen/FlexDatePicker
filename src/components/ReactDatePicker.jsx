@@ -34,6 +34,16 @@ export class ReactDatePicker extends Component {
         const parentNode = nodeRef.current.parentNode;
         parentNode.classList.add("mx-datepicker");
 
+        let firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
+        if (this.props.overwriteFirstDay && this.props.firstDayOfTheWeek >= 0 && this.props.firstDayOfTheWeek <= 6) {
+            firstDayOfTheWeek = this.props.firstDayOfTheWeek;
+        }
+
+        let minimalDaysInFirstWeek = mx.session.sessionData.locale.minimalDaysInFirstWeek;
+        if (this.props.overwriteMinimalDays && this.props.minimalDaysInFirstWeek >= 0 && this.props.minimalDaysInFirstWeek <= 6) {
+            minimalDaysInFirstWeek = this.props.minimalDaysInFirstWeek;
+        }
+
         const eras = mx.session.sessionData.locale.dates.eras;
         const quarters = ["1", "2", "3", "4"];
         const months = mx.session.sessionData.locale.dates.months;
@@ -50,13 +60,17 @@ export class ReactDatePicker extends Component {
             formatLong: {
                 date: () => mx.session.sessionData.locale.patterns.date
             },
-            match: {}
+            match: {},
+            options: {
+                weekStartsOn: firstDayOfTheWeek,
+                firstWeekContainsDate: minimalDaysInFirstWeek
+            }
         };
 
         let dateFormat = null;
         let timeFormat = null;
         if (this.props.customFormat) {
-            console.log(this.props.customFormat)
+            console.log(this.props.customFormat);
             dateFormat = this.props.customFormat;
             timeFormat = this.props.customFormat;
         } else {
@@ -83,10 +97,7 @@ export class ReactDatePicker extends Component {
             }
         }
 
-        let firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
-        if (this.props.overwriteFirstDay && this.props.firstDayOfTheWeek >= 0 && this.props.firstDayOfTheWeek <= 6) {
-            firstDayOfTheWeek = this.props.firstDayOfTheWeek;
-        }
+
 
         this.setState({
             firstDayOfTheWeek,
