@@ -40,7 +40,11 @@ export class ReactDatePicker extends Component {
         }
 
         let minimalDaysInFirstWeek = mx.session.sessionData.locale.minimalDaysInFirstWeek;
-        if (this.props.overwriteMinimalDays && this.props.minimalDaysInFirstWeek >= 0 && this.props.minimalDaysInFirstWeek <= 6) {
+        if (
+            this.props.overwriteMinimalDays &&
+            this.props.minimalDaysInFirstWeek >= 0 &&
+            this.props.minimalDaysInFirstWeek <= 6
+        ) {
             minimalDaysInFirstWeek = this.props.minimalDaysInFirstWeek;
         }
 
@@ -96,8 +100,6 @@ export class ReactDatePicker extends Component {
                     dateFormat = mx.session.sessionData.locale.patterns.date;
             }
         }
-
-
 
         this.setState({
             firstDayOfTheWeek,
@@ -281,6 +283,7 @@ export class ReactDatePicker extends Component {
                     showMonthYearPicker={this.props.pickerType === "month"}
                     showYearPicker={this.props.pickerType === "year"}
                     disabledKeyboardNavigation={true}
+                    portalId="root-portal"
                 />
                 <button
                     type="button"
