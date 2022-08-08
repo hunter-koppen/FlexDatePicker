@@ -28,6 +28,8 @@ export class ClevrDatePicker extends Component {
                 pickerType={this.props.pickerType}
                 overwriteFirstDay={this.props.overwriteFirstDay}
                 firstDayOfTheWeek={this.props.firstDayOfTheWeek}
+                overwriteMinimalDays={this.props.overwriteMinimalDays}
+                minimalDaysInFirstWeek={this.props.minimalDaysInFirstWeek}
                 timeTranslation={this.props.timeTranslation}
                 timeInterval={this.props.timeInterval}
                 minTime={this.props.minTime}
