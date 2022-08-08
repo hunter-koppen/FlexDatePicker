@@ -54,12 +54,14 @@
             background: transparent;
         }
     }
-    .react-datepicker__month-container, .react-datepicker__year--container {
+    .react-datepicker__month-container,
+    .react-datepicker__year--container {
         .react-datepicker-year-header {
             font-size: 14px;
             margin-top: 6px;
         }
-        .react-datepicker__month-text, .react-datepicker__year-text {
+        .react-datepicker__month-text,
+        .react-datepicker__year-text {
             padding: 4px 0;
             width: 100px;
         }
