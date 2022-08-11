@@ -235,8 +235,10 @@ export class ReactDatePicker extends Component {
     };
 
     onBlur = () => {
-        // provide the initial and current values for the Mendix OnChange action
-        this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
+        // provide the initial and current values for the Mendix OnChange action and use a timeout to make sure the onchange logic has finished
+        setTimeout(() => {
+            this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
+        }, 200);
     };
 
     togglePicker = () => {
