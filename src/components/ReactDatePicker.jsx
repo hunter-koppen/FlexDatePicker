@@ -74,7 +74,6 @@ export class ReactDatePicker extends Component {
         let dateFormat = null;
         let timeFormat = null;
         if (this.props.customFormat) {
-            console.log(this.props.customFormat);
             dateFormat = this.props.customFormat;
             timeFormat = this.props.customFormat;
         } else {
@@ -131,6 +130,7 @@ export class ReactDatePicker extends Component {
             if (this.state.dateValueStartInitial === null) {
                 this.setState({
                     dateValueStartInitial: this.props.dateAttribute.value,
+                    dateValueStart: this.props.dateAttribute.value,
                     readOnly: this.props.dateAttribute.readOnly
                 });
             }
