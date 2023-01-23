@@ -77,4 +77,12 @@
         background-color: initial;
         color: initial;
     }
+    .react-datepicker__excluded {
+        background: #C52A1A;
+        border-radius: 0.3rem;
+        &:hover {
+            background: #C52A1A !important;
+            border-radius: 0.3rem;
+        }
+    }
 }

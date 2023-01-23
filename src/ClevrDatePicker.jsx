@@ -35,6 +35,8 @@ export class ClevrDatePicker extends Component {
                 minTime={this.props.minTime}
                 maxTime={this.props.maxTime}
                 customFormat={this.props.customFormat}
+                excludedDates={this.props.excludedDates}
+                excludedDatesAttribute={this.props.excludedDatesAttribute}
             />
         );
     }
@@ -60,6 +62,7 @@ export class ClevrDatePicker extends Component {
         }
     }
 
+    // eslint-disable-next-line consistent-return
     validator = value => {
         const { requiredMessage } = this.props;
         if (requiredMessage && requiredMessage.value && !value) {
