@@ -169,7 +169,11 @@ export class ReactDatePicker extends Component {
                 this.props.dateAttribute !== this.state.editedValueStart
             ) {
                 if (this.state.excludedDatesFound) {
-                    this.setState({ dateValueStart: this.props.dateAttribute.value, excludedDatesFound: false, maxDate: null });
+                    this.setState({
+                        dateValueStart: this.props.dateAttribute.value,
+                        excludedDatesFound: false,
+                        maxDate: null
+                    });
                 } else {
                     this.setState({ dateValueStart: this.props.dateAttribute.value });
                 }
