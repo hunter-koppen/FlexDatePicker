@@ -77,12 +77,17 @@
         background-color: initial;
         color: initial;
     }
-    .react-datepicker__excluded {
+}
+.react-datepicker-popper {
+    .react-datepicker .react-datepicker__excluded {
         background: #C52A1A;
+        font-weight: normal;
         border-radius: 0.3rem;
+        color: white;
         &:hover {
-            background: #C52A1A !important;
+            background: #C52A1A;
             border-radius: 0.3rem;
+            color: white;
         }
     }
 }
