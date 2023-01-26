@@ -29,7 +29,7 @@ export class ReactDatePicker extends Component {
         maxTime: setHours(setMinutes(now, 59), 23),
         timeTranslation: null,
         excludedDates: [],
-        tempMax: null
+        excludedDatesFound: null
     };
 
     componentDidMount() {
@@ -119,6 +119,8 @@ export class ReactDatePicker extends Component {
                 ) {
                     let excludedDates = [];
                     try {
+                        const sortInstrs = [[this.props.excludedDatesAttribute.id, "asc"]];
+                        this.props.excludedDates.setSortOrder(sortInstrs);
                         excludedDates = this.props.excludedDates.items.map(item => {
                             const presetValue = this.props.excludedDatesAttribute.get(item).value; // our attribute value for this item
                             return presetValue;
@@ -166,7 +168,11 @@ export class ReactDatePicker extends Component {
                 prevProps.dateAttribute !== this.props.dateAttribute &&
                 this.props.dateAttribute !== this.state.editedValueStart
             ) {
-                this.setState({ dateValueStart: this.props.dateAttribute.value });
+                if (this.state.excludedDatesFound) {
+                    this.setState({ dateValueStart: this.props.dateAttribute.value, excludedDatesFound: false, maxDate: null });
+                } else {
+                    this.setState({ dateValueStart: this.props.dateAttribute.value });
+                }
             }
         }
 
@@ -191,17 +197,17 @@ export class ReactDatePicker extends Component {
         }
 
         if (this.props.dateRange && this.state.excludedDates && this.state.dateValueStart && !this.state.dateValueEnd) {
-            if (!this.state.tempMax) {
+            if (!this.state.excludedDatesFound) {
                 for (let i = 0; i < this.state.excludedDates.length; i++) {
                     const date = this.state.excludedDates[i];
                     if (this.state.maxDate) {
                         if (date <= this.state.maxDate && date > this.state.dateValueStart) {
-                            this.setState({ maxDate: date, tempMax: true });
+                            this.setState({ maxDate: date, excludedDatesFound: true });
                             break;
                         }
                     } else {
                         if (date > this.state.dateValueStart) {
-                            this.setState({ maxDate: date, tempMax: true });
+                            this.setState({ maxDate: date, excludedDatesFound: true });
                             break;
                         }
                     }
@@ -209,7 +215,7 @@ export class ReactDatePicker extends Component {
             }
         } else if (this.props.maxDate && this.props.maxDate.status === "available") {
             if (this.state.maxDate !== this.props.maxDate.value) {
-                this.setState({ maxDate: this.props.maxDate.value, tempMax: false });
+                this.setState({ maxDate: this.props.maxDate.value, excludedDatesFound: false });
             }
         }
         if (this.props.minTime && this.props.minTime.status === "available") {
