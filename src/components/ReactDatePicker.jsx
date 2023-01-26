@@ -299,6 +299,12 @@ export class ReactDatePicker extends Component {
     };
 
     render() {
+        let highlightDates;
+        if (this.props.highlightExcludedDays) {
+            highlightDates = [
+                { "react-datepicker__excluded": this.state.excludedDates ? this.state.excludedDates : [] }
+            ];
+        }
         return (
             <>
                 <div
@@ -332,9 +338,7 @@ export class ReactDatePicker extends Component {
                         maxDate={this.state.maxDate}
                         openToDate={this.state.minDate ? this.state.minDate : this.state.dateValueStart}
                         excludeDates={this.state.excludedDates ? this.state.excludedDates : []}
-                        highlightDates={[
-                            { "react-datepicker__excluded": this.state.excludedDates ? this.state.excludedDates : [] }
-                        ]}
+                        highlightDates={highlightDates}
                         dateFormat={this.state.dateFormat}
                         dateFormatCalendar="MMMM"
                         timeFormat={this.state.timeFormat}

@@ -122,6 +122,10 @@
                         <attributeType name="DateTime"/>
                     </attributeTypes>
                 </property>
+                <property key="highlightExcludedDays" type="boolean" defaultValue="true">
+                    <caption>Highlight Excluded Days</caption>
+                    <description/>
+                </property>
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Time settings">
