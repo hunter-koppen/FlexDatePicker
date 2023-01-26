@@ -27,7 +27,9 @@ export class ReactDatePicker extends Component {
         maxDate: null,
         minTime: setHours(setMinutes(now, 0), 0),
         maxTime: setHours(setMinutes(now, 59), 23),
-        timeTranslation: null
+        timeTranslation: null,
+        excludedDates: [],
+        tempMax: null
     };
 
     componentDidMount() {
@@ -109,6 +111,27 @@ export class ReactDatePicker extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        if (this.props.excludedDates) {
+            if (this.props.excludedDates.status === "available") {
+                if (
+                    prevProps.excludedDates !== this.props.excludedDates &&
+                    this.props.excludedDates.items !== this.state.excludedDates
+                ) {
+                    let excludedDates = [];
+                    try {
+                        excludedDates = this.props.excludedDates.items.map(item => {
+                            const presetValue = this.props.excludedDatesAttribute.get(item).value; // our attribute value for this item
+                            return presetValue;
+                        });
+                    } catch (err) {
+                        console.log(err);
+                    }
+                    this.setState({
+                        excludedDates
+                    });
+                }
+            }
+        }
         if (this.props.dateRange) {
             if (this.props.dateAttributeEnd && this.props.dateAttributeEnd.status === "available") {
                 // update date end value if prop is different from widget, only needed if we use daterange
@@ -166,9 +189,27 @@ export class ReactDatePicker extends Component {
                 this.setState({ minDate: this.props.minDate.value });
             }
         }
-        if (this.props.maxDate && this.props.maxDate.status === "available") {
+
+        if (this.props.dateRange && this.state.excludedDates && this.state.dateValueStart && !this.state.dateValueEnd) {
+            if (!this.state.tempMax) {
+                for (let i = 0; i < this.state.excludedDates.length; i++) {
+                    const date = this.state.excludedDates[i];
+                    if (this.state.maxDate) {
+                        if (date <= this.state.maxDate && date > this.state.dateValueStart) {
+                            this.setState({ maxDate: date, tempMax: true });
+                            break;
+                        }
+                    } else {
+                        if (date > this.state.dateValueStart) {
+                            this.setState({ maxDate: date, tempMax: true });
+                            break;
+                        }
+                    }
+                }
+            }
+        } else if (this.props.maxDate && this.props.maxDate.status === "available") {
             if (this.state.maxDate !== this.props.maxDate.value) {
-                this.setState({ maxDate: this.props.maxDate.value });
+                this.setState({ maxDate: this.props.maxDate.value, tempMax: false });
             }
         }
         if (this.props.minTime && this.props.minTime.status === "available") {
@@ -249,61 +290,74 @@ export class ReactDatePicker extends Component {
 
     render() {
         return (
-            <div className="mx-compound-control" onFocus={this.props.onEnterAction} onBlur={this.onBlur} ref={nodeRef}>
-                <DatePicker
-                    tabIndex={this.props.tabIndex}
-                    selected={this.state.dateValueStart}
-                    selectsRange={this.props.dateRange}
-                    startDate={this.state.dateValueStart}
-                    endDate={this.state.dateValueEnd}
-                    onChange={this.onChange}
-                    onSelect={this.onSelect}
-                    showWeekNumbers={this.props.showWeekNumbers}
-                    placeholderText={this.state.placeholder}
-                    calendarStartDay={this.state.firstDayOfTheWeek}
-                    locale={this.state.locale}
-                    showPopperArrow={false}
-                    onClickOutside={this.togglePicker}
-                    open={this.state.open}
-                    className="form-control"
-                    showYearDropdown={true}
-                    showMonthDropdown={true}
-                    dropdownMode="select"
-                    readOnly={this.state.readOnly}
-                    disabled={this.state.readOnly}
-                    minDate={this.state.minDate}
-                    maxDate={this.state.maxDate}
-                    dateFormat={this.state.dateFormat}
-                    dateFormatCalendar="MMMM"
-                    timeFormat={this.state.timeFormat}
-                    timeCaption={this.state.timeTranslation}
-                    timeIntervals={this.props.timeInterval}
-                    minTime={this.state.minTime}
-                    maxTime={this.state.maxTime}
-                    showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
-                    showTimeSelectOnly={this.props.pickerType === "time"}
-                    showMonthYearPicker={this.props.pickerType === "month"}
-                    showYearPicker={this.props.pickerType === "year"}
-                    disabledKeyboardNavigation={true}
-                    portalId="root-portal"
-                />
-                <button
-                    type="button"
-                    className="btn mx-button"
-                    tabIndex={-1}
-                    disabled={this.state.readOnly}
-                    onClick={this.togglePicker}
+            <>
+                <div
+                    className="mx-compound-control"
+                    onFocus={this.props.onEnterAction}
+                    onBlur={this.onBlur}
+                    ref={nodeRef}
                 >
-                    <span className="glyphicon glyphicon-calendar"></span>
-                </button>
-                <Alert
-                    bootstrapStyle={"danger"}
-                    message={this.state.validationFeedback}
-                    className={"mx-validation-message"}
-                >
-                    {this.state.validationFeedback}
-                </Alert>
-            </div>
+                    <DatePicker
+                        tabIndex={this.props.tabIndex}
+                        selected={this.state.dateValueStart}
+                        selectsRange={this.props.dateRange}
+                        startDate={this.state.dateValueStart}
+                        endDate={this.state.dateValueEnd}
+                        onChange={this.onChange}
+                        onSelect={this.onSelect}
+                        showWeekNumbers={this.props.showWeekNumbers}
+                        placeholderText={this.state.placeholder}
+                        calendarStartDay={this.state.firstDayOfTheWeek}
+                        locale={this.state.locale}
+                        showPopperArrow={false}
+                        onClickOutside={this.togglePicker}
+                        open={this.state.open}
+                        className="form-control"
+                        showYearDropdown={true}
+                        showMonthDropdown={true}
+                        dropdownMode="select"
+                        readOnly={this.state.readOnly}
+                        disabled={this.state.readOnly}
+                        minDate={this.state.minDate}
+                        maxDate={this.state.maxDate}
+                        openToDate={this.state.minDate ? this.state.minDate : this.state.dateValueStart}
+                        excludeDates={this.state.excludedDates ? this.state.excludedDates : []}
+                        highlightDates={[
+                            { "react-datepicker__excluded": this.state.excludedDates ? this.state.excludedDates : [] }
+                        ]}
+                        dateFormat={this.state.dateFormat}
+                        dateFormatCalendar="MMMM"
+                        timeFormat={this.state.timeFormat}
+                        timeCaption={this.state.timeTranslation}
+                        timeIntervals={this.props.timeInterval}
+                        minTime={this.state.minTime}
+                        maxTime={this.state.maxTime}
+                        showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
+                        showTimeSelectOnly={this.props.pickerType === "time"}
+                        showMonthYearPicker={this.props.pickerType === "month"}
+                        showYearPicker={this.props.pickerType === "year"}
+                        disabledKeyboardNavigation={true}
+                        portalId="root-portal"
+                        isClearable
+                    />
+                    <button
+                        type="button"
+                        className="btn mx-button"
+                        tabIndex={-1}
+                        disabled={this.state.readOnly}
+                        onClick={this.togglePicker}
+                    >
+                        <span className="glyphicon glyphicon-calendar"></span>
+                    </button>
+                    <Alert
+                        bootstrapStyle={"danger"}
+                        message={this.state.validationFeedback}
+                        className={"mx-validation-message"}
+                    >
+                        {this.state.validationFeedback}
+                    </Alert>
+                </div>
+            </>
         );
     }
 }
