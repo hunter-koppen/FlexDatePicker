@@ -1,10 +1,9 @@
+import { hidePropertyIn } from "@mendix/pluggable-widgets-tools";
+
 export function getProperties(values, defaultProperties) {
-    // Do the values manipulation here to control the visibility of properties in Studio and Studio Pro conditionally.
-    /* Example
-    if (values.myProperty === "custom") {
-        delete defaultProperties.properties.myOtherProperty;
+    if (values.dateRange === false) {
+        hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
     }
-    */
     return defaultProperties;
 }
 
