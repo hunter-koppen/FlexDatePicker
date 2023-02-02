@@ -4,6 +4,15 @@ export function getProperties(values, defaultProperties) {
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
     }
+    if (values.required === false) {
+        hidePropertyIn(defaultProperties, values, "requiredMessage");
+    }
+    if (values.overwriteFirstDay === false) {
+        hidePropertyIn(defaultProperties, values, "firstDayOfTheWeek");
+    }
+    if (values.overwriteMinimalDays === false) {
+        hidePropertyIn(defaultProperties, values, "minimalDaysInFirstWeek");
+    }
     return defaultProperties;
 }
 
