@@ -353,16 +353,19 @@ export class ReactDatePicker extends Component {
                         disabledKeyboardNavigation={true}
                         portalId="root-portal"
                         isClearable
+                        inline={this.props.inline}
                     />
-                    <button
-                        type="button"
-                        className="btn mx-button"
-                        tabIndex={-1}
-                        disabled={this.state.readOnly}
-                        onClick={this.togglePicker}
-                    >
-                        <span className="glyphicon glyphicon-calendar"></span>
-                    </button>
+                    {!this.props.inline ? (
+                        <button
+                            type="button"
+                            className="btn mx-button"
+                            tabIndex={-1}
+                            disabled={this.state.readOnly}
+                            onClick={this.togglePicker}
+                        >
+                            <span className="glyphicon glyphicon-calendar"></span>
+                        </button>
+                    ) : null}
                     <Alert
                         bootstrapStyle={"danger"}
                         message={this.state.validationFeedback}

@@ -38,6 +38,7 @@ export class ClevrDatePicker extends Component {
                 excludedDates={this.props.excludedDates}
                 excludedDatesAttribute={this.props.excludedDatesAttribute}
                 highlightExcludedDays={this.props.highlightExcludedDays}
+                inline={this.props.inline}
             />
         );
     }
