@@ -10,6 +10,7 @@ Next to the standard functionality like a placeholder and input events this widg
 - Time only picker
 - Month picker
 - Year picker
+- Show the picker inline on the page
 
 It also takes all the date formatting and language from the Mendix session and validation messages on the input also work correctly.
 
