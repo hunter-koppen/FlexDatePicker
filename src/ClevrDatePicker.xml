@@ -114,13 +114,33 @@
                     <returnType type="DateTime" />
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Excluded Dates">
+            <propertyGroup caption="Ex/Included Dates">
+                <property key="excludeOrInclude" type="enumeration" defaultValue="none">
+                    <caption>Exclude or Include</caption>
+                    <description>Exclude = hide these specific dates, Include = only show these specific dates, hiding the rest</description>
+                    <enumerationValues>
+                        <enumerationValue key="none">None</enumerationValue>
+                        <enumerationValue key="exclude">Exclude</enumerationValue>
+                        <enumerationValue key="include">Include</enumerationValue>
+                    </enumerationValues>
+                </property>
+                <property key="includedDates" type="datasource" required="false" isList="true">
+                    <caption>Included Dates Objects</caption>
+                    <description>Choose the entity containing the included dates</description>
+                </property>
+                <property key="includedDatesAttribute" type="attribute" required="true" dataSource="includedDates">
+                    <caption>Included Date attribute</caption>
+                    <description>Choose the included DateTime from the entity</description>
+                    <attributeTypes>
+                        <attributeType name="DateTime"/>
+                    </attributeTypes>
+                </property>
                 <property key="excludedDates" type="datasource" required="false" isList="true">
                     <caption>Excluded Dates Objects</caption>
                     <description>Choose the entity containing the excluded dates</description>
                 </property>
                 <property key="excludedDatesAttribute" type="attribute" required="true" dataSource="excludedDates">
-                    <caption>Excluded Date Prop</caption>
+                    <caption>Excluded Date attribute</caption>
                     <description>Choose the excluded DateTime from the entity</description>
                     <attributeTypes>
                         <attributeType name="DateTime"/>

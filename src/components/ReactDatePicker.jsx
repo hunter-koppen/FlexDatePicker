@@ -29,7 +29,9 @@ export class ReactDatePicker extends Component {
         maxTime: setHours(setMinutes(now, 59), 23),
         timeTranslation: null,
         excludedDates: [],
-        excludedDatesFound: null
+        excludedDatesFound: null,
+        includedDates: null,
+        includedDatesFound: null
     };
 
     componentDidMount() {
@@ -111,25 +113,36 @@ export class ReactDatePicker extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.excludedDates) {
+        if (this.props.excludeOrInclude === "exclude" && this.props.excludedDates) {
             if (this.props.excludedDates.status === "available") {
                 if (
                     prevProps.excludedDates !== this.props.excludedDates &&
                     this.props.excludedDates.items !== this.state.excludedDates
                 ) {
-                    let excludedDates = [];
-                    try {
-                        const sortInstrs = [[this.props.excludedDatesAttribute.id, "asc"]];
-                        this.props.excludedDates.setSortOrder(sortInstrs);
-                        excludedDates = this.props.excludedDates.items.map(item => {
-                            const presetValue = this.props.excludedDatesAttribute.get(item).value; // our attribute value for this item
-                            return presetValue;
-                        });
-                    } catch (err) {
-                        console.log(err);
-                    }
+                    const sortInstrs = [[this.props.excludedDatesAttribute.id, "asc"]];
+                    this.props.excludedDates.setSortOrder(sortInstrs);
+                    const excludedDates = this.props.excludedDates.items.map(item => {
+                        const dateValue = this.props.excludedDatesAttribute.get(item).value;
+                        return dateValue;
+                    });
                     this.setState({
                         excludedDates
+                    });
+                }
+            }
+        }
+        if (this.props.excludeOrInclude === "include" && this.props.includedDates) {
+            if (this.props.includedDates.status === "available") {
+                if (
+                    prevProps.includedDates !== this.props.includedDates &&
+                    this.props.includedDates.items !== this.state.includedDates
+                ) {
+                    const includedDates = this.props.includedDates.items.map(item => {
+                        const dateValue = this.props.includedDatesAttribute.get(item).value;
+                        return dateValue;
+                    });
+                    this.setState({
+                        includedDates
                     });
                 }
             }
@@ -200,7 +213,13 @@ export class ReactDatePicker extends Component {
             }
         }
 
-        if (this.props.dateRange && this.state.excludedDates && this.state.dateValueStart && !this.state.dateValueEnd) {
+        if (
+            this.props.dateRange &&
+            this.props.excludeOrInclude === "exclude" &&
+            this.state.excludedDates &&
+            this.state.dateValueStart &&
+            !this.state.dateValueEnd
+        ) {
             if (!this.state.excludedDatesFound) {
                 for (let i = 0; i < this.state.excludedDates.length; i++) {
                     const date = this.state.excludedDates[i];
@@ -300,10 +319,18 @@ export class ReactDatePicker extends Component {
 
     render() {
         let highlightDates;
-        if (this.props.highlightExcludedDays) {
+        if (this.props.excludeOrInclude === "exclude" && this.props.highlightExcludedDays) {
             highlightDates = [
                 { "react-datepicker__excluded": this.state.excludedDates ? this.state.excludedDates : [] }
             ];
+        }
+        let includedDates;
+        if (this.props.excludeOrInclude === "include") {
+            if (this.state.includedDates) {
+                includedDates = this.state.includedDates;
+            } else {
+                includedDates = [];
+            }
         }
         return (
             <>
@@ -337,7 +364,8 @@ export class ReactDatePicker extends Component {
                         minDate={this.state.minDate}
                         maxDate={this.state.maxDate}
                         openToDate={this.state.minDate ? this.state.minDate : this.state.dateValueStart}
-                        excludeDates={this.state.excludedDates ? this.state.excludedDates : []}
+                        excludeDates={this.state.excludedDates ? this.state.excludedDates : null}
+                        includeDates={includedDates}
                         highlightDates={highlightDates}
                         dateFormat={this.state.dateFormat}
                         dateFormatCalendar="MMMM"

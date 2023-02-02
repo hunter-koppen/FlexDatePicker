@@ -13,6 +13,20 @@ export function getProperties(values, defaultProperties) {
     if (values.overwriteMinimalDays === false) {
         hidePropertyIn(defaultProperties, values, "minimalDaysInFirstWeek");
     }
+    if (values.excludeOrInclude === "exclude") {
+        hidePropertyIn(defaultProperties, values, "includedDates");
+        hidePropertyIn(defaultProperties, values, "includedDatesAttribute");
+    } else if (values.excludeOrInclude === "include") {
+        hidePropertyIn(defaultProperties, values, "excludedDates");
+        hidePropertyIn(defaultProperties, values, "excludedDatesAttribute");
+        hidePropertyIn(defaultProperties, values, "highlightExcludedDays");
+    } else {
+        hidePropertyIn(defaultProperties, values, "includedDates");
+        hidePropertyIn(defaultProperties, values, "includedDatesAttribute");
+        hidePropertyIn(defaultProperties, values, "excludedDates");
+        hidePropertyIn(defaultProperties, values, "excludedDatesAttribute");
+        hidePropertyIn(defaultProperties, values, "highlightExcludedDays");
+    }
     return defaultProperties;
 }
 

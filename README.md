@@ -4,7 +4,7 @@ Datepicker with more options than the default Mendix Datepicker
 ## Features
 Next to the standard functionality like a placeholder and input events this widget also supports:
 - Show weeknumbers
-- Disable/Exclude days in the picker itself (e.g. only future days)
+- Disable/Exclude or Include days in the picker itself (specify exactly which days are available for picking)
 - Date ranges
 - Time picker in combination with a datepicker
 - Time only picker

@@ -35,9 +35,12 @@ export class ClevrDatePicker extends Component {
                 minTime={this.props.minTime}
                 maxTime={this.props.maxTime}
                 customFormat={this.props.customFormat}
+                excludeOrInclude={this.props.excludeOrInclude}
                 excludedDates={this.props.excludedDates}
                 excludedDatesAttribute={this.props.excludedDatesAttribute}
                 highlightExcludedDays={this.props.highlightExcludedDays}
+                includedDates={this.props.includedDates}
+                includedDatesAttribute={this.props.includedDatesAttribute}
                 inline={this.props.inline}
             />
         );
