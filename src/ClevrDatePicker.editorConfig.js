@@ -4,6 +4,9 @@ export function getProperties(values, defaultProperties) {
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
     }
+    if (values.dateRange === false) {
+        hidePropertyIn(defaultProperties, values, "onChangeActionEnd");
+    }
     if (values.required === false) {
         hidePropertyIn(defaultProperties, values, "requiredMessage");
     }

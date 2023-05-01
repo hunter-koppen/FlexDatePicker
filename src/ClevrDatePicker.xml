@@ -12,14 +12,14 @@
                     <caption>Date range?</caption>
                     <description/>
                 </property>
-                <property key="dateAttribute" type="attribute" required="true">
+                <property key="dateAttribute" type="attribute" required="true" onChange="onChangeAction">
                     <caption>Attribute</caption>
                     <description>The date attribute to store the date in.</description>
                     <attributeTypes>
                         <attributeType name="DateTime"/>
                     </attributeTypes>
                 </property>
-                <property key="dateAttributeEnd" type="attribute" required="false">
+                <property key="dateAttributeEnd" type="attribute" required="false" onChange="onChangeActionEnd">
                     <caption>End Range Attribute</caption>
                     <description>Value of the end of the range.</description>
                     <attributeTypes>
@@ -193,6 +193,10 @@
             </property>
             <property key="onChangeAction" type="action" required="false">
                 <caption>On change</caption>
+                <description></description>
+            </property>
+            <property key="onChangeActionEnd" type="action" required="false">
+                <caption>On change end</caption>
                 <description></description>
             </property>
         </propertyGroup>
