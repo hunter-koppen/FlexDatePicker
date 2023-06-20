@@ -52,18 +52,9 @@ export class ClevrDatePicker extends Component {
         }
     }
 
-    onLeave(initialvalue, currentvalue) {
+    onLeave() {
         if (this.props.onLeaveAction && this.props.onLeaveAction.canExecute) {
             this.props.onLeaveAction.execute();
-        }
-        this.onChange(initialvalue, currentvalue);
-    }
-
-    onChange(initialvalue, currentvalue) {
-        if (this.props.onChangeAction && this.props.onChangeAction.canExecute) {
-            if (initialvalue !== currentvalue) {
-                this.props.onChangeAction.execute();
-            }
         }
     }
 
