@@ -302,12 +302,16 @@ export class ReactDatePicker extends Component {
         if (!this.props.dateRange) {
             this.setState({ open: false });
         }
+        if (this.props.inline) {
+            this.onBlur();
+        }
     };
 
     onBlur = () => {
         // provide the initial and current values for the Mendix OnChange action and use a timeout to make sure the onchange logic has finished
         setTimeout(() => {
             this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
+            this.setState({ dateValueStartInitial: null });
         }, 200);
     };
 
@@ -334,13 +338,9 @@ export class ReactDatePicker extends Component {
         }
         return (
             <>
-                <div
-                    className="mx-compound-control"
-                    onFocus={this.props.onEnterAction}
-                    onBlur={this.onBlur}
-                    ref={nodeRef}
-                >
+                <div className="mx-compound-control" onBlur={this.onBlur} ref={nodeRef}>
                     <DatePicker
+                        onInputClick={this.props.onEnterAction}
                         tabIndex={this.props.tabIndex}
                         selected={this.state.dateValueStart}
                         selectsRange={this.props.dateRange}
@@ -390,6 +390,7 @@ export class ReactDatePicker extends Component {
                             tabIndex={-1}
                             disabled={this.state.readOnly}
                             onClick={this.togglePicker}
+                            onFocus={this.props.onEnterAction}
                         >
                             <span className="glyphicon glyphicon-calendar"></span>
                         </button>
