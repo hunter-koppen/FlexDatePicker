@@ -10,9 +10,7 @@ const now = new Date();
 export class ReactDatePicker extends Component {
     state = {
         dateValueStart: null,
-        dateValueStartInitial: null,
         dateValueEnd: null,
-        dateValueEndInitial: null,
         editedValueStart: null,
         editedValueEnd: null,
         placeholder: null,
@@ -21,7 +19,7 @@ export class ReactDatePicker extends Component {
         open: false,
         dateFormat: null,
         timeFormat: null,
-        readOnly: false,
+        readOnly: null,
         validationFeedback: null,
         minDate: null,
         maxDate: null,
@@ -156,18 +154,12 @@ export class ReactDatePicker extends Component {
                 ) {
                     this.setState({ dateValueEnd: this.props.dateAttributeEnd.value });
                 }
-                if (this.state.dateValueEndInitial === null) {
-                    this.setState({
-                        dateValueEndInitial: this.props.dateAttributeEnd.value
-                    });
-                }
             }
         }
         if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
-            // set initial values, the end initial is set but not used if there is no range
-            if (this.state.dateValueStartInitial === null) {
+            // set initial values
+            if (this.state.readOnly === null) {
                 this.setState({
-                    dateValueStartInitial: this.props.dateAttribute.value,
                     dateValueStart: this.props.dateAttribute.value,
                     readOnly: this.props.dateAttribute.readOnly
                 });
@@ -302,16 +294,12 @@ export class ReactDatePicker extends Component {
         if (!this.props.dateRange) {
             this.setState({ open: false });
         }
-        if (this.props.inline) {
-            this.onBlur();
-        }
     };
 
     onBlur = () => {
-        // provide the initial and current values for the Mendix OnChange action and use a timeout to make sure the onchange logic has finished
+        // use a timeout to make sure the onchange logic has finished
         setTimeout(() => {
-            this.props.onLeaveAction(this.state.dateValueStartInitial, this.state.dateValueStart);
-            this.setState({ dateValueStartInitial: null });
+            this.props.onLeaveAction();
         }, 200);
     };
 
