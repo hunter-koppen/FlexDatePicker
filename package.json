@@ -1,7 +1,7 @@
 {
   "name": "clevrdatepicker",
   "widgetName": "ClevrDatePicker",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "",
   "copyright": "CLEVR NL B.V. 2022",
   "author": "Hunter Koppen",
@@ -25,10 +25,10 @@
     "release": "pluggable-widgets-tools release:web"
   },
   "devDependencies": {
-    "@mendix/pluggable-widgets-tools": "^9.20.0"
+    "@mendix/pluggable-widgets-tools": "^9.24.1"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "react-datepicker": "^4.8.0"
+    "react-datepicker": "^4.16.0"
   }
 }

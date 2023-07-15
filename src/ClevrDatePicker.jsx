@@ -42,6 +42,7 @@ export class ClevrDatePicker extends Component {
                 includedDates={this.props.includedDates}
                 includedDatesAttribute={this.props.includedDatesAttribute}
                 inline={this.props.inline}
+                classNames={this.props.class}
             />
         );
     }

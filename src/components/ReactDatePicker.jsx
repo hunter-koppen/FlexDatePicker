@@ -33,8 +33,7 @@ export class ReactDatePicker extends Component {
     };
 
     componentDidMount() {
-        const parentNode = nodeRef.current.parentNode;
-        parentNode.classList.add("mx-datepicker");
+        this.setParentClasses();
 
         let firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
         if (this.props.overwriteFirstDay && this.props.firstDayOfTheWeek >= 0 && this.props.firstDayOfTheWeek <= 6) {
@@ -111,6 +110,8 @@ export class ReactDatePicker extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        this.setParentClasses();
+
         if (this.props.excludeOrInclude === "exclude" && this.props.excludedDates) {
             if (this.props.excludedDates.status === "available") {
                 if (
@@ -309,6 +310,17 @@ export class ReactDatePicker extends Component {
         }
     };
 
+    setParentClasses = () => {
+        if (nodeRef.current) {
+            const parentNode = nodeRef.current.parentNode;
+            if (this.props.classNames) {
+                parentNode.classList.add("mx-datepicker", ...this.props.classNames.split(" "));
+            } else {
+                parentNode.classList.add("mx-datepicker");
+            }
+        }
+    };
+
     render() {
         let highlightDates;
         if (this.props.excludeOrInclude === "exclude" && this.props.highlightExcludedDays) {
@@ -325,73 +337,71 @@ export class ReactDatePicker extends Component {
             }
         }
         return (
-            <>
-                <div className="mx-compound-control" onBlur={this.onBlur} ref={nodeRef}>
-                    <DatePicker
-                        onInputClick={this.props.onEnterAction}
-                        tabIndex={this.props.tabIndex}
-                        selected={this.state.dateValueStart}
-                        selectsRange={this.props.dateRange}
-                        startDate={this.state.dateValueStart}
-                        endDate={this.state.dateValueEnd}
-                        onChange={this.onChange}
-                        onSelect={this.onSelect}
-                        showWeekNumbers={this.props.showWeekNumbers}
-                        placeholderText={this.state.placeholder}
-                        calendarStartDay={this.state.firstDayOfTheWeek}
-                        locale={this.state.locale}
-                        showPopperArrow={false}
-                        onClickOutside={this.togglePicker}
-                        open={this.state.open}
-                        className="form-control"
-                        showYearDropdown={true}
-                        showMonthDropdown={true}
-                        dropdownMode="select"
-                        readOnly={this.state.readOnly}
+            <div className="mx-compound-control" onBlur={this.onBlur} ref={nodeRef}>
+                <DatePicker
+                    onInputClick={this.props.onEnterAction}
+                    tabIndex={this.props.tabIndex}
+                    selected={this.state.dateValueStart}
+                    selectsRange={this.props.dateRange}
+                    startDate={this.state.dateValueStart}
+                    endDate={this.state.dateValueEnd}
+                    onChange={this.onChange}
+                    onSelect={this.onSelect}
+                    showWeekNumbers={this.props.showWeekNumbers}
+                    placeholderText={this.state.placeholder}
+                    calendarStartDay={this.state.firstDayOfTheWeek}
+                    locale={this.state.locale}
+                    showPopperArrow={false}
+                    onClickOutside={this.togglePicker}
+                    open={this.state.open}
+                    className="form-control"
+                    showYearDropdown={true}
+                    showMonthDropdown={true}
+                    dropdownMode="select"
+                    readOnly={this.state.readOnly}
+                    disabled={this.state.readOnly}
+                    minDate={this.state.minDate}
+                    maxDate={this.state.maxDate}
+                    openToDate={this.state.minDate ? this.state.minDate : this.state.dateValueStart}
+                    excludeDates={this.state.excludedDates ? this.state.excludedDates : null}
+                    includeDates={includedDates}
+                    highlightDates={highlightDates}
+                    dateFormat={this.state.dateFormat}
+                    dateFormatCalendar="MMMM"
+                    timeFormat={this.state.timeFormat}
+                    timeCaption={this.state.timeTranslation}
+                    timeIntervals={this.props.timeInterval}
+                    minTime={this.state.minTime}
+                    maxTime={this.state.maxTime}
+                    showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
+                    showTimeSelectOnly={this.props.pickerType === "time"}
+                    showMonthYearPicker={this.props.pickerType === "month"}
+                    showYearPicker={this.props.pickerType === "year"}
+                    disabledKeyboardNavigation={true}
+                    portalId="root-portal"
+                    isClearable
+                    inline={this.props.inline}
+                />
+                {!this.props.inline ? (
+                    <button
+                        type="button"
+                        className="btn mx-button"
+                        tabIndex={-1}
                         disabled={this.state.readOnly}
-                        minDate={this.state.minDate}
-                        maxDate={this.state.maxDate}
-                        openToDate={this.state.minDate ? this.state.minDate : this.state.dateValueStart}
-                        excludeDates={this.state.excludedDates ? this.state.excludedDates : null}
-                        includeDates={includedDates}
-                        highlightDates={highlightDates}
-                        dateFormat={this.state.dateFormat}
-                        dateFormatCalendar="MMMM"
-                        timeFormat={this.state.timeFormat}
-                        timeCaption={this.state.timeTranslation}
-                        timeIntervals={this.props.timeInterval}
-                        minTime={this.state.minTime}
-                        maxTime={this.state.maxTime}
-                        showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
-                        showTimeSelectOnly={this.props.pickerType === "time"}
-                        showMonthYearPicker={this.props.pickerType === "month"}
-                        showYearPicker={this.props.pickerType === "year"}
-                        disabledKeyboardNavigation={true}
-                        portalId="root-portal"
-                        isClearable
-                        inline={this.props.inline}
-                    />
-                    {!this.props.inline ? (
-                        <button
-                            type="button"
-                            className="btn mx-button"
-                            tabIndex={-1}
-                            disabled={this.state.readOnly}
-                            onClick={this.togglePicker}
-                            onFocus={this.props.onEnterAction}
-                        >
-                            <span className="glyphicon glyphicon-calendar"></span>
-                        </button>
-                    ) : null}
-                    <Alert
-                        bootstrapStyle={"danger"}
-                        message={this.state.validationFeedback}
-                        className={"mx-validation-message"}
+                        onClick={this.togglePicker}
+                        onFocus={this.props.onEnterAction}
                     >
-                        {this.state.validationFeedback}
-                    </Alert>
-                </div>
-            </>
+                        <span className="glyphicon glyphicon-calendar"></span>
+                    </button>
+                ) : null}
+                <Alert
+                    bootstrapStyle={"danger"}
+                    message={this.state.validationFeedback}
+                    className={"mx-validation-message"}
+                >
+                    {this.state.validationFeedback}
+                </Alert>
+            </div>
         );
     }
 }
