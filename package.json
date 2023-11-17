@@ -1,9 +1,9 @@
 {
   "name": "clevrdatepicker",
   "widgetName": "ClevrDatePicker",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "",
-  "copyright": "CLEVR NL B.V. 2022",
+  "copyright": "Kobeon B.V. 2024",
   "author": "Hunter Koppen",
   "engines": {
     "node": ">=12"
