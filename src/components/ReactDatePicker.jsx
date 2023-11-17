@@ -283,7 +283,6 @@ export class ReactDatePicker extends Component {
             }
         } else {
             this.setState({ dateValueStart: newDate, editedValueStart: newDate });
-            debugger;
             if (newDate === null && this.props.dateAttribute !== undefined) {
                 this.props.dateAttribute.setValue(undefined);
             } else if (this.props.dateAttribute !== newDate) {
@@ -297,13 +296,13 @@ export class ReactDatePicker extends Component {
             if (this.props.pickerType === "time" || this.props.pickerType === "datetime") {
                 // do nothing
             } else {
-                if (newDate.target.value == "") {
+                if (newDate.target.value === "") {
                     this.props.dateAttribute.setValue(undefined);
                     this.props.dateAttributeEnd.setValue(undefined);
                 }
             }
         } else {
-            if (newDate.target.value == "") {
+            if (newDate.target.value === "") {
                 this.props.dateAttribute.setValue(undefined);
             }
         }
