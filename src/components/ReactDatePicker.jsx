@@ -4,10 +4,14 @@ import { Alert } from "./Alert";
 import DatePicker from "react-datepicker";
 import { setHours, setMinutes } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
-const nodeRef = React.createRef();
 const now = new Date();
 
 export class ReactDatePicker extends Component {
+    constructor(props) {
+        super(props);
+        this.nodeRef = React.createRef();
+    }
+
     state = {
         dateValueStart: null,
         dateValueEnd: null,
@@ -328,13 +332,9 @@ export class ReactDatePicker extends Component {
     };
 
     setParentClasses = () => {
-        if (nodeRef.current) {
-            const parentNode = nodeRef.current.parentNode;
-            if (this.props.classNames) {
-                parentNode.classList.add("mx-datepicker", ...this.props.classNames.split(" "));
-            } else {
-                parentNode.classList.add("mx-datepicker");
-            }
+        if (this.nodeRef.current) {
+            const parentNode = this.nodeRef.current.parentNode;
+            parentNode.classList.add("mx-datepicker");
         }
     };
 
@@ -354,7 +354,7 @@ export class ReactDatePicker extends Component {
             }
         }
         return (
-            <div className="mx-compound-control" onBlur={this.onBlur} ref={nodeRef}>
+            <div className="mx-compound-control" onBlur={this.onBlur} ref={this.nodeRef}>
                 <DatePicker
                     onInputClick={this.props.onEnterAction}
                     tabIndex={this.props.tabIndex}
