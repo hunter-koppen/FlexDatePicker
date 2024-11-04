@@ -3,7 +3,7 @@ import { Component, createElement } from "react";
 import { ReactDatePicker } from "./components/ReactDatePicker";
 import "./ui/ReactDatePicker.scss";
 
-export class ClevrDatePicker extends Component {
+export class FlexDatePicker extends Component {
     onEnterHandler = this.onEnter.bind(this);
     onLeaveHandler = this.onLeave.bind(this);
 
