@@ -1,6 +1,6 @@
 {
-  "name": "clevrdatepicker",
-  "widgetName": "ClevrDatePicker",
+  "name": "flexdatepicker",
+  "widgetName": "FlexDatePicker",
   "version": "1.4.3",
   "description": "",
   "copyright": "Kobeon B.V. 2024",
@@ -14,7 +14,7 @@
     "mendixHost": "http://localhost:8080",
     "developmentPort": 3000
   },
-  "packagePath": "clevr",
+  "packagePath": "kobeon",
   "scripts": {
     "start": "pluggable-widgets-tools start:server",
     "dev": "pluggable-widgets-tools start:web",
@@ -25,10 +25,10 @@
     "release": "pluggable-widgets-tools release:web"
   },
   "devDependencies": {
-    "@mendix/pluggable-widgets-tools": "^9.24.1"
+    "@mendix/pluggable-widgets-tools": "^10.16.0"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "react-datepicker": "^4.16.0"
+    "react-datepicker": "^7.5.0"
   }
 }

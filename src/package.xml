@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <package xmlns="http://www.mendix.com/package/1.0/">
-    <clientModule name="ClevrDatePicker" version="1.4.3" xmlns="http://www.mendix.com/clientModule/1.0/">
+    <clientModule name="FlexDatePicker" version="1.4.3" xmlns="http://www.mendix.com/clientModule/1.0/">
         <widgetFiles>
-            <widgetFile path="ClevrDatePicker.xml"/>
+            <widgetFile path="FlexDatePicker.xml"/>
         </widgetFiles>
         <files>
-            <file path="clevr/clevrdatepicker"/>
+            <file path="kobeon/flexdatepicker"/>
         </files>
     </clientModule>
 </package>
