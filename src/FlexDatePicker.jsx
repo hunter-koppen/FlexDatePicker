@@ -42,6 +42,7 @@ export class FlexDatePicker extends Component {
                 includedDates={this.props.includedDates}
                 includedDatesAttribute={this.props.includedDatesAttribute}
                 inline={this.props.inline}
+                clearable={this.props.clearable}
             />
         );
     }

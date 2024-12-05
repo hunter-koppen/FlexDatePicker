@@ -1,8 +1,7 @@
 import React, { Component, createElement } from "react";
 import { Alert } from "./Alert";
-
 import DatePicker from "react-datepicker";
-import { setHours, setMinutes } from "date-fns";
+import { setHours, setMinutes, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 const now = new Date();
 
@@ -261,53 +260,90 @@ export class ReactDatePicker extends Component {
         }
     }
 
-    onChange = newDate => {
-        if (this.props.dateRange) {
-            if (this.props.pickerType === "time" || this.props.pickerType === "datetime") {
-                console.error("cannot use date range and time picker at the same time");
-            } else {
-                const [newDateStart, newDateEnd] = newDate;
-                this.setState({
-                    dateValueStart: newDateStart,
-                    dateValueEnd: newDateEnd,
-                    editedValueStart: newDateStart,
-                    editedValueEnd: newDateEnd
-                });
-                // Mendix will error if you try to push null into the datevalue
-                if (newDateStart === null && this.props.dateAttribute !== undefined) {
-                    this.props.dateAttribute.setValue(undefined);
-                } else if (this.props.dateAttribute !== newDateStart) {
-                    this.props.dateAttribute.setValue(newDateStart);
+    onChangeRaw = newDate => {
+        if (newDate.type === "click") {
+            // Event was triggered by clicking in the picker, ignore it
+            return;
+        }
+        const { dateFormat } = this.state;
+        const parsedDate = parse(newDate.target ? newDate.target.value : newDate, dateFormat, new Date());
+
+        if (!isNaN(parsedDate)) {
+            if (this.props.dateRange) {
+                if (this.props.pickerType === "time" || this.props.pickerType === "datetime") {
+                    console.error("cannot use date range and time picker at the same time");
+                } else {
+                    if (newDate.target && newDate.target.value === "") {
+                        this.props.dateAttribute.setValue(undefined);
+                        this.props.dateAttributeEnd.setValue(undefined);
+                    } else {
+                        const [newDateStart, newDateEnd] = newDate;
+                        this.setState({
+                            dateValueStart: newDateStart,
+                            dateValueEnd: newDateEnd,
+                            editedValueStart: newDateStart,
+                            editedValueEnd: newDateEnd
+                        });
+                        if (newDateStart === null && this.props.dateAttribute !== undefined) {
+                            this.props.dateAttribute.setValue(undefined);
+                        } else if (this.props.dateAttribute !== newDateStart) {
+                            this.props.dateAttribute.setValue(newDateStart);
+                        }
+                        if (newDateEnd === null && this.props.dateAttributeEnd !== undefined) {
+                            this.props.dateAttributeEnd.setValue(undefined);
+                        } else if (this.props.dateAttributeEnd !== newDateEnd) {
+                            this.props.dateAttributeEnd.setValue(newDateEnd);
+                        }
+                    }
                 }
-                if (newDateEnd === null && this.props.dateAttributeEnd !== undefined) {
-                    this.props.dateAttributeEnd.setValue(undefined);
-                } else if (this.props.dateAttributeEnd !== newDateEnd) {
-                    this.props.dateAttributeEnd.setValue(newDateEnd);
+            } else {
+                this.setState({ dateValueStart: parsedDate, editedValueStart: parsedDate });
+                if (newDate.target && newDate.target.value === "" && this.props.dateAttribute !== undefined) {
+                    this.props.dateAttribute.setValue(undefined);
+                } else if (this.props.dateAttribute !== parsedDate) {
+                    this.props.dateAttribute.setValue(parsedDate);
                 }
             }
         } else {
-            this.setState({ dateValueStart: newDate, editedValueStart: newDate });
-            if (newDate === null && this.props.dateAttribute !== undefined) {
+            if (this.props.dateRange) {
                 this.props.dateAttribute.setValue(undefined);
-            } else if (this.props.dateAttribute !== newDate) {
-                this.props.dateAttribute.setValue(newDate);
+                this.props.dateAttributeEnd.setValue(undefined);
+            } else {
+                this.props.dateAttribute.setValue(undefined);
             }
         }
     };
 
-    onChangeRaw = newDate => {
+    onChange = (date, event) => {
+        if (event && event.target && event.target.value) {
+            // Event was triggered by typing, ignore it
+            return;
+        }
+
         if (this.props.dateRange) {
-            if (this.props.pickerType === "time" || this.props.pickerType === "datetime") {
-                // do nothing
-            } else {
-                if (newDate.target.value === "") {
-                    this.props.dateAttribute.setValue(undefined);
-                    this.props.dateAttributeEnd.setValue(undefined);
-                }
+            const [start, end] = date;
+            this.setState({
+                dateValueStart: start,
+                dateValueEnd: end,
+                editedValueStart: start,
+                editedValueEnd: end
+            });
+            if (start === null && this.props.dateAttribute !== undefined) {
+                this.props.dateAttribute.setValue(undefined);
+            } else if (this.props.dateAttribute !== start) {
+                this.props.dateAttribute.setValue(start);
+            }
+            if (end === null && this.props.dateAttributeEnd !== undefined) {
+                this.props.dateAttributeEnd.setValue(undefined);
+            } else if (this.props.dateAttributeEnd !== end) {
+                this.props.dateAttributeEnd.setValue(end);
             }
         } else {
-            if (newDate.target.value === "") {
+            this.setState({ dateValueStart: date, editedValueStart: date });
+            if (date === null && this.props.dateAttribute !== undefined) {
                 this.props.dateAttribute.setValue(undefined);
+            } else if (this.props.dateAttribute !== date) {
+                this.props.dateAttribute.setValue(date);
             }
         }
     };
@@ -326,7 +362,18 @@ export class ReactDatePicker extends Component {
     };
 
     togglePicker = () => {
-        if (this.state.readOnly === false) {
+        if (this.state.readOnly === false && !this.props.inline) {
+            const inputField = this.nodeRef.current.querySelector(".form-control");
+            const { dateFormat } = this.state;
+            if (inputField.value.trim() !== "") {
+                // check if the entered date is valid otherwise reset the date
+                const parsedDate = parse(inputField.value, dateFormat, new Date());
+                if (isNaN(parsedDate)) {
+                    this.setState({ dateValueStart: now, editedValueStart: now }, () => {
+                        this.setState({ dateValueStart: null, editedValueStart: null });
+                    });
+                }
+            }
             this.setState({ open: !this.state.open });
         }
     };
@@ -397,7 +444,7 @@ export class ReactDatePicker extends Component {
                     showYearPicker={this.props.pickerType === "year"}
                     disabledKeyboardNavigation={true}
                     portalId="root-portal"
-                    isClearable
+                    isClearable={this.props.clearable}
                     inline={this.props.inline}
                 />
                 {!this.props.inline ? (

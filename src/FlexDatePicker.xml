@@ -43,6 +43,10 @@
                     <caption>Custom format</caption>
                     <description>Overwrite the default locale settings with a custom format</description>
                 </property>
+                <property key="clearable" type="boolean" defaultValue="true">
+                    <caption>Clearable?</caption>
+                    <description/>
+                </property>
                 <property key="inline" type="boolean" defaultValue="false">
                     <caption>Inline?</caption>
                     <description/>
