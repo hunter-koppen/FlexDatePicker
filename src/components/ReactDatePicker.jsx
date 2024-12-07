@@ -32,7 +32,8 @@ export class ReactDatePicker extends Component {
         excludedDates: [],
         excludedDatesFound: null,
         includedDates: null,
-        includedDatesFound: null
+        includedDatesFound: null,
+        invalidDate: false
     };
 
     componentDidMount() {
@@ -326,7 +327,8 @@ export class ReactDatePicker extends Component {
                 dateValueStart: start,
                 dateValueEnd: end,
                 editedValueStart: start,
-                editedValueEnd: end
+                editedValueEnd: end,
+                invalidDate: false
             });
             if (start === null && this.props.dateAttribute !== undefined) {
                 this.props.dateAttribute.setValue(undefined);
@@ -339,7 +341,7 @@ export class ReactDatePicker extends Component {
                 this.props.dateAttributeEnd.setValue(end);
             }
         } else {
-            this.setState({ dateValueStart: date, editedValueStart: date });
+            this.setState({ dateValueStart: date, editedValueStart: date, invalidDate: false });
             if (date === null && this.props.dateAttribute !== undefined) {
                 this.props.dateAttribute.setValue(undefined);
             } else if (this.props.dateAttribute !== date) {
@@ -355,6 +357,16 @@ export class ReactDatePicker extends Component {
     };
 
     onBlur = () => {
+        const inputField = this.nodeRef.current.querySelector(".form-control");
+        const { dateFormat } = this.state;
+        const parsedDate = parse(inputField.value, dateFormat, new Date());
+
+        if (isNaN(parsedDate) && inputField.value.trim() !== "") {
+            this.setState({ invalidDate: true });
+        } else {
+            this.setState({ invalidDate: false });
+        }
+
         // use a timeout to make sure the onchange logic has finished
         setTimeout(() => {
             this.props.onLeaveAction();
@@ -461,10 +473,10 @@ export class ReactDatePicker extends Component {
                 ) : null}
                 <Alert
                     bootstrapStyle={"danger"}
-                    message={this.state.validationFeedback}
+                    message={this.state.invalidDate ? this.props.invalidDateMessage : this.state.validationFeedback}
                     className={"mx-validation-message"}
                 >
-                    {this.state.validationFeedback}
+                    {this.state.invalidDate ? this.props.invalidDateMessage : this.state.validationFeedback}
                 </Alert>
             </div>
         );

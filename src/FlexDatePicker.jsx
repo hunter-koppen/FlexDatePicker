@@ -43,6 +43,7 @@ export class FlexDatePicker extends Component {
                 includedDatesAttribute={this.props.includedDatesAttribute}
                 inline={this.props.inline}
                 clearable={this.props.clearable}
+                invalidDateMessage={this.props.invalidDateMessage.value}
             />
         );
     }

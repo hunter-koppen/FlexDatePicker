@@ -175,16 +175,6 @@
                     <description>Time interval in minutes</description>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Translation">
-                <property key="timeTranslation" type="textTemplate" required="true">
-                    <caption>Time</caption>
-                    <description/>
-                    <translations>
-                        <translation lang="en_US">Time</translation>
-                        <translation lang="nl_NL">Tijd</translation>
-                    </translations>
-                </property>
-            </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Events">
             <property key="onEnterAction" type="action" required="false">
@@ -202,6 +192,24 @@
             <property key="onChangeActionEnd" type="action" required="false">
                 <caption>On change end</caption>
                 <description></description>
+            </property>
+        </propertyGroup>
+        <propertyGroup caption="Translation">
+            <property key="timeTranslation" type="textTemplate" required="true">
+                <caption>Time</caption>
+                <description/>
+                <translations>
+                    <translation lang="en_US">Time</translation>
+                    <translation lang="nl_NL">Tijd</translation>
+                </translations>
+            </property>
+            <property key="invalidDateMessage" type="textTemplate" required="true">
+                <caption>Invalid date</caption>
+                <description/>
+                <translations>
+                    <translation lang="en_US">Invalid date</translation>
+                    <translation lang="nl_NL">Ongeldige datum</translation>
+                </translations>
             </property>
         </propertyGroup>
     </properties>
