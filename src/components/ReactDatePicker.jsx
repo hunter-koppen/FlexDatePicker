@@ -394,6 +394,11 @@ export class ReactDatePicker extends Component {
         if (this.nodeRef.current) {
             const parentNode = this.nodeRef.current.parentNode;
             parentNode.classList.add("mx-datepicker");
+            if (this.state.invalidDate || this.state.validationFeedback) {
+                parentNode.classList.add("has-error");
+            } else {
+                parentNode.classList.remove("has-error");
+            }
         }
     };
 
