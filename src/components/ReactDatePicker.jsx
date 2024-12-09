@@ -363,8 +363,8 @@ export class ReactDatePicker extends Component {
 
         if (this.props.dateRange) {
             const [start, end] = inputField.value.split(" - ");
-            const parsedStartDate = start ? parse(start, dateFormat, new Date()) : '';
-            const parsedEndDate = end ? parse(end, dateFormat, new Date()) : '';
+            const parsedStartDate = start ? parse(start, dateFormat, new Date()) : "";
+            const parsedEndDate = end ? parse(end, dateFormat, new Date()) : "";
 
             if (isNaN(parsedStartDate) || isNaN(parsedEndDate)) {
                 this.setState({ invalidDate: true });
