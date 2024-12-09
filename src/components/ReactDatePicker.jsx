@@ -322,7 +322,7 @@ export class ReactDatePicker extends Component {
         }
 
         if (this.props.dateRange) {
-            const [start, end] = date;
+            const [start, end] = date || [];
             this.setState({
                 dateValueStart: start,
                 dateValueEnd: end,
@@ -361,10 +361,22 @@ export class ReactDatePicker extends Component {
         const { dateFormat } = this.state;
         const parsedDate = parse(inputField.value, dateFormat, new Date());
 
-        if (isNaN(parsedDate) && inputField.value.trim() !== "") {
-            this.setState({ invalidDate: true });
+        if (this.props.dateRange) {
+            const [start, end] = inputField.value.split(" - ");
+            const parsedStartDate = start ? parse(start, dateFormat, new Date()) : '';
+            const parsedEndDate = end ? parse(end, dateFormat, new Date()) : '';
+
+            if (isNaN(parsedStartDate) || isNaN(parsedEndDate)) {
+                this.setState({ invalidDate: true });
+            } else {
+                this.setState({ invalidDate: false });
+            }
         } else {
-            this.setState({ invalidDate: false });
+            if (isNaN(parsedDate) && inputField.value.trim() !== "") {
+                this.setState({ invalidDate: true });
+            } else {
+                this.setState({ invalidDate: false });
+            }
         }
 
         // use a timeout to make sure the onchange logic has finished
@@ -379,11 +391,23 @@ export class ReactDatePicker extends Component {
             const { dateFormat } = this.state;
             if (inputField.value.trim() !== "") {
                 // check if the entered date is valid otherwise reset the date
-                const parsedDate = parse(inputField.value, dateFormat, new Date());
-                if (isNaN(parsedDate)) {
-                    this.setState({ dateValueStart: now, editedValueStart: now }, () => {
-                        this.setState({ dateValueStart: null, editedValueStart: null });
-                    });
+                if (this.props.dateRange) {
+                    const [start, end] = inputField.value.split(" - ");
+                    const parsedStartDate = start ? parse(start, dateFormat, new Date()) : NaN;
+                    const parsedEndDate = end ? parse(end, dateFormat, new Date()) : NaN;
+
+                    if (isNaN(parsedStartDate) || isNaN(parsedEndDate)) {
+                        this.setState({ dateValueStart: now, dateValueEnd: now }, () => {
+                            this.setState({ dateValueStart: null, dateValueEnd: null });
+                        });
+                    }
+                } else {
+                    const parsedDate = parse(inputField.value, dateFormat, new Date());
+                    if (isNaN(parsedDate)) {
+                        this.setState({ dateValueStart: now, editedValueStart: now }, () => {
+                            this.setState({ dateValueStart: null, editedValueStart: null });
+                        });
+                    }
                 }
             }
             this.setState({ open: !this.state.open });
