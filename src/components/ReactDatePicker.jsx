@@ -275,50 +275,43 @@ export class ReactDatePicker extends Component {
             return;
         }
         const { dateFormat } = this.state;
-        const parsedDate = parse(newDate.target ? newDate.target.value : newDate, dateFormat, new Date());
+        const inputValue = newDate.target ? newDate.target.value : newDate;
 
-        if (!isNaN(parsedDate)) {
-            if (this.props.dateRange) {
-                if (this.props.pickerType === "time" || this.props.pickerType === "datetime") {
-                    console.error("cannot use date range and time picker at the same time");
-                } else {
-                    if (newDate.target && newDate.target.value === "") {
-                        this.props.dateAttribute.setValue(undefined);
-                        this.props.dateAttributeEnd.setValue(undefined);
-                    } else {
-                        const [newDateStart, newDateEnd] = newDate;
-                        this.setState({
-                            dateValueStart: newDateStart,
-                            dateValueEnd: newDateEnd,
-                            editedValueStart: newDateStart,
-                            editedValueEnd: newDateEnd
-                        });
-                        if (newDateStart === null && this.props.dateAttribute !== undefined) {
-                            this.props.dateAttribute.setValue(undefined);
-                        } else if (this.props.dateAttribute !== newDateStart) {
-                            this.props.dateAttribute.setValue(newDateStart);
-                        }
-                        if (newDateEnd === null && this.props.dateAttributeEnd !== undefined) {
-                            this.props.dateAttributeEnd.setValue(undefined);
-                        } else if (this.props.dateAttributeEnd !== newDateEnd) {
-                            this.props.dateAttributeEnd.setValue(newDateEnd);
-                        }
-                    }
+        if (this.props.dateRange) {
+            const [start, end] = inputValue.split(" - ");
+            const parsedStartDate = start ? parse(start, dateFormat, new Date()) : NaN;
+            const parsedEndDate = end ? parse(end, dateFormat, new Date()) : NaN;
+
+            if (!isNaN(parsedStartDate) && (!end || !isNaN(parsedEndDate))) {
+                this.setState({
+                    dateValueStart: parsedStartDate,
+                    dateValueEnd: end ? parsedEndDate : null,
+                    editedValueStart: parsedStartDate,
+                    editedValueEnd: end ? parsedEndDate : null,
+                    invalidDate: false
+                });
+                if (this.props.dateAttribute !== parsedStartDate) {
+                    this.props.dateAttribute.setValue(parsedStartDate);
+                }
+                if (this.props.dateAttributeEnd !== parsedEndDate) {
+                    this.props.dateAttributeEnd.setValue(parsedEndDate);
                 }
             } else {
-                this.setState({ dateValueStart: parsedDate, editedValueStart: parsedDate });
-                if (newDate.target && newDate.target.value === "" && this.props.dateAttribute !== undefined) {
-                    this.props.dateAttribute.setValue(undefined);
-                } else if (this.props.dateAttribute !== parsedDate) {
-                    this.props.dateAttribute.setValue(parsedDate);
-                }
+                this.setState({ invalidDate: true });
             }
         } else {
-            if (this.props.dateRange) {
-                this.props.dateAttribute.setValue(undefined);
-                this.props.dateAttributeEnd.setValue(undefined);
+            const parsedDate = parse(inputValue, dateFormat, new Date());
+            if (!isNaN(parsedDate)) {
+                this.setState({
+                    dateValueStart: parsedDate,
+                    editedValueStart: parsedDate,
+                    invalidDate: false
+                });
+                if (this.props.dateAttribute !== parsedDate) {
+                    this.props.dateAttribute.setValue(parsedDate);
+                }
             } else {
-                this.props.dateAttribute.setValue(undefined);
+                this.setState({ invalidDate: true });
             }
         }
     };
