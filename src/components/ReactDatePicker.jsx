@@ -418,6 +418,7 @@ export class ReactDatePicker extends Component {
         if (this.nodeRef.current) {
             const parentNode = this.nodeRef.current.parentNode;
             parentNode.classList.add("mx-datepicker");
+            parentNode.classList.add("flex-datepicker");
             if (this.state.invalidDate || this.state.validationFeedback) {
                 parentNode.classList.add("has-error");
             } else {
@@ -461,6 +462,7 @@ export class ReactDatePicker extends Component {
                     onClickOutside={this.togglePicker}
                     open={this.state.open}
                     className="form-control"
+                    calendarClassName="flex-datepicker-calendar"
                     showYearDropdown={true}
                     showMonthDropdown={true}
                     dropdownMode="select"
