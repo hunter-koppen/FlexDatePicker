@@ -24,3 +24,16 @@ The required validation and any other validation actions in nanoflows/microflows
 
 ## Issues, suggestions and feature requests
 https://github.com/hunter-koppen/FlexDatePicker/issues
+
+## To Do
+- Overwrite week settings automatically
+- Fix other pickers (next to date)
+- Align picker to the left unless time picker
+- Fix padding-top of picker
+- Fix for brand-primary styling
+- Add appearance settings
+    - Improve standard icon, date and time icons seperately
+    - Allow for uploading custom icon
+    - Setting for spacing between button and input or not
+- New datepicker type - No Picker (dont show the button, only typing)
+- Sidebar in picker to quickly set a date or range of date (this week or today etc)

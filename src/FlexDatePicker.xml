@@ -13,24 +13,28 @@
                     <description/>
                 </property>
                 <property key="dateAttribute" type="attribute" required="true" onChange="onChangeAction">
-                    <caption>Attribute</caption>
-                    <description>The date attribute to store the date in.</description>
+                    <caption>Start range attribute</caption>
+                    <description/>
                     <attributeTypes>
                         <attributeType name="DateTime"/>
                     </attributeTypes>
                 </property>
                 <property key="dateAttributeEnd" type="attribute" required="false" onChange="onChangeActionEnd">
-                    <caption>End Range Attribute</caption>
-                    <description>Value of the end of the range.</description>
+                    <caption>End range attribute</caption>
+                    <description/>
                     <attributeTypes>
                         <attributeType name="DateTime"/>
                     </attributeTypes>
+                </property>
+                <property key="customFormat" type="string" required="false">
+                    <caption>Custom format</caption>
+                    <description>Overwrite the default locale settings with a custom format</description>
                 </property>
             </propertyGroup>
             <propertyGroup caption="Picker">
                 <property key="pickerType" type="enumeration" defaultValue="date">
                     <caption>Picker type</caption>
-                    <description>Which type of datepicker should the popup show</description>
+                    <description/>
                     <enumerationValues>
                         <enumerationValue key="date">Date</enumerationValue>
                         <enumerationValue key="time">Time</enumerationValue>
@@ -39,24 +43,18 @@
                         <enumerationValue key="year">Year</enumerationValue>
                     </enumerationValues>
                 </property>
-                <property key="customFormat" type="string" required="false">
-                    <caption>Custom format</caption>
-                    <description>Overwrite the default locale settings with a custom format</description>
+                <property key="placeholder" type="expression" defaultValue="" required="false">
+                    <caption>Placeholder text</caption>
+                    <description/>
+                    <returnType type="String" />
                 </property>
                 <property key="clearable" type="boolean" defaultValue="true">
-                    <caption>Clearable?</caption>
+                    <caption>Clearable</caption>
                     <description/>
                 </property>
                 <property key="inline" type="boolean" defaultValue="false">
-                    <caption>Inline?</caption>
+                    <caption>Inline</caption>
                     <description/>
-                </property>
-            </propertyGroup>
-            <propertyGroup caption="Placeholder">
-                <property key="placeholder" type="expression" defaultValue="" required="false">
-                    <caption>Placeholder</caption>
-                    <description/>
-                    <returnType type="String" />
                 </property>
             </propertyGroup>
             <propertyGroup caption="Label">

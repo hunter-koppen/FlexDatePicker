@@ -1,8 +1,45 @@
-import { hidePropertyIn } from "@mendix/pluggable-widgets-tools";
+import { hidePropertyIn, changePropertyIn } from "@mendix/pluggable-widgets-tools";
 
 export function getProperties(values, defaultProperties) {
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
+        changePropertyIn(
+            defaultProperties,
+            values,
+            prop => {
+                prop.caption = "Date attribute";
+            },
+            "dateAttribute"
+        );
+    }
+    if (values.pickerType === "date") {
+        hidePropertyIn(defaultProperties, values, "timeTranslation");
+        hidePropertyIn(defaultProperties, values, "minTime");
+        hidePropertyIn(defaultProperties, values, "maxTime");
+        hidePropertyIn(defaultProperties, values, "timeInterval");
+    } else if (values.pickerType === "month" || values.pickerType === "year") {
+        hidePropertyIn(defaultProperties, values, "showWeekNumbers");
+        hidePropertyIn(defaultProperties, values, "overwriteFirstDay");
+        hidePropertyIn(defaultProperties, values, "firstDayOfTheWeek");
+        hidePropertyIn(defaultProperties, values, "overwriteMinimalDays");
+        hidePropertyIn(defaultProperties, values, "timeTranslation");
+        hidePropertyIn(defaultProperties, values, "minTime");
+        hidePropertyIn(defaultProperties, values, "maxTime");
+        hidePropertyIn(defaultProperties, values, "timeInterval");
+    } else if (values.pickerType === "time") {
+        hidePropertyIn(defaultProperties, values, "showWeekNumbers");
+        hidePropertyIn(defaultProperties, values, "overwriteFirstDay");
+        hidePropertyIn(defaultProperties, values, "firstDayOfTheWeek");
+        hidePropertyIn(defaultProperties, values, "overwriteMinimalDays");
+        hidePropertyIn(defaultProperties, values, "minimalDaysInFirstWeek");
+        hidePropertyIn(defaultProperties, values, "minDate");
+        hidePropertyIn(defaultProperties, values, "maxDate");
+        hidePropertyIn(defaultProperties, values, "excludeOrInclude");
+        hidePropertyIn(defaultProperties, values, "includedDates");
+        hidePropertyIn(defaultProperties, values, "includedDatesAttribute");
+        hidePropertyIn(defaultProperties, values, "excludedDates");
+        hidePropertyIn(defaultProperties, values, "excludedDatesAttribute");
+        hidePropertyIn(defaultProperties, values, "highlightExcludedDays");
     }
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "onChangeActionEnd");
