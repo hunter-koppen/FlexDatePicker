@@ -5,12 +5,14 @@ import { setHours, setMinutes, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import prevIcon from "../ui/arrow-left.svg";
 import nextIcon from "../ui/arrow-right.svg";
+import arrowIcon from "../ui/arrow-up.svg";
 const now = new Date();
 
 export class ReactDatePicker extends Component {
     constructor(props) {
         super(props);
         this.nodeRef = React.createRef();
+        this.headerRef = React.createRef();
     }
 
     state = {
@@ -35,7 +37,9 @@ export class ReactDatePicker extends Component {
         excludedDatesFound: null,
         includedDates: null,
         includedDatesFound: null,
-        invalidDate: false
+        invalidDate: false,
+        showMonthPicker: false,
+        showYearPicker: false
     };
 
     componentDidMount() {
@@ -361,10 +365,14 @@ export class ReactDatePicker extends Component {
     onBlur = () => {
         const inputField = this.nodeRef.current.querySelector(".form-control");
         const { dateFormat } = this.state;
-        const parsedDate = parse(inputField.value, dateFormat, new Date());
+        let parsedDate = null;
+
+        if (inputField && inputField.value.trim() !== "") {
+            parsedDate = parse(inputField.value, dateFormat, new Date());
+        }
 
         if (this.props.dateRange) {
-            const [start, end] = inputField.value.split(" - ");
+            const [start, end] = inputField ? inputField.value.split(" - ") : ["", ""];
             const parsedStartDate = start ? parse(start, dateFormat, new Date()) : "";
             const parsedEndDate = end ? parse(end, dateFormat, new Date()) : "";
 
@@ -374,7 +382,7 @@ export class ReactDatePicker extends Component {
                 this.setState({ invalidDate: false });
             }
         } else {
-            if (isNaN(parsedDate) && inputField.value.trim() !== "") {
+            if (isNaN(parsedDate) && inputField && inputField.value.trim() !== "") {
                 this.setState({ invalidDate: true });
             } else {
                 this.setState({ invalidDate: false });
@@ -412,7 +420,11 @@ export class ReactDatePicker extends Component {
                     }
                 }
             }
-            this.setState({ open: !this.state.open });
+            this.setState(prevState => ({
+                open: !prevState.open,
+                showMonthPicker: false,
+                showYearPicker: false
+            }));
         }
     };
 
@@ -429,7 +441,56 @@ export class ReactDatePicker extends Component {
         }
     };
 
-    CustomHeader = ({
+    toggleMonthPicker = () => {
+        this.setState(
+            prevState => ({
+                showMonthPicker: !prevState.showMonthPicker,
+                showYearPicker: false
+            }),
+            () => {
+                if (this.state.showMonthPicker) {
+                    setTimeout(() => {
+                        const overlayContainer = this.headerRef.current.querySelector(
+                            ".flex-datepicker-overlay-container"
+                        );
+                        if (overlayContainer) {
+                            overlayContainer.classList.add("open");
+                        }
+                    }, 0);
+                }
+            }
+        );
+    };
+
+    toggleYearPicker = () => {
+        this.setState(
+            prevState => ({
+                showYearPicker: !prevState.showYearPicker,
+                showMonthPicker: false
+            }),
+            () => {
+                if (this.state.showYearPicker) {
+                    setTimeout(() => {
+                        const overlay = this.headerRef.current.querySelector(".flex-datepicker-overlay");
+                        if (overlay) {
+                            const overlayContainer = overlay.querySelector(".flex-datepicker-overlay-container");
+                            overlayContainer.classList.add("open");
+                            const selectedYearButton = overlay.querySelector(".selected");
+                            if (selectedYearButton) {
+                                const yearPickerHeight = overlay.clientHeight;
+                                const buttonHeight = selectedYearButton.clientHeight;
+                                const scrollPosition =
+                                    selectedYearButton.offsetTop - yearPickerHeight / 2 + buttonHeight / 2;
+                                overlayContainer.scrollTop = scrollPosition;
+                            }
+                        }
+                    }, 0);
+                }
+            }
+        );
+    };
+
+    customHeader = ({
         date,
         changeYear,
         changeMonth,
@@ -438,29 +499,67 @@ export class ReactDatePicker extends Component {
         prevMonthButtonDisabled,
         nextMonthButtonDisabled
     }) => (
-        <div className="flex-datepicker-header">
+        <div className="flex-datepicker-header" ref={this.headerRef}>
             <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled} className="flex-datepicker-arrow">
                 <img src={prevIcon} alt="Previous Month" />
             </button>
             <div>
-                <select value={date.getMonth()} onChange={({ target: { value } }) => changeMonth(value)}>
-                    {Array.from({ length: 12 }, (_, i) => (
-                        <option key={i} value={i}>
-                            {new Date(0, i).toLocaleString("default", { month: "long" })}
-                        </option>
-                    ))}
-                </select>
-                <select value={date.getFullYear()} onChange={({ target: { value } }) => changeYear(value)}>
-                    {Array.from({ length: 201 }, (_, i) => (
-                        <option key={i} value={1900 + i}>
-                            {1900 + i}
-                        </option>
-                    ))}
-                </select>
+                <button
+                    onClick={this.toggleMonthPicker}
+                    className={`flex-datepicker-header-button ${this.state.showMonthPicker ? "open" : ""}`}
+                >
+                    {new Date(date).toLocaleString("default", { month: "long" })}
+                    <img src={arrowIcon} alt="Arrow" />
+                </button>
+                <button
+                    onClick={this.toggleYearPicker}
+                    className={`flex-datepicker-header-button ${this.state.showYearPicker ? "open" : ""}`}
+                >
+                    {date.getFullYear()}
+                    <img src={arrowIcon} alt="Arrow" />
+                </button>
             </div>
             <button onClick={increaseMonth} disabled={nextMonthButtonDisabled} className="flex-datepicker-arrow">
                 <img src={nextIcon} alt="Next Month" />
             </button>
+            {this.state.showMonthPicker && (
+                <div className="flex-datepicker-overlay">
+                    <div className="flex-datepicker-overlay-container">
+                        {Array.from({ length: 12 }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    changeMonth(i);
+                                    this.toggleMonthPicker();
+                                }}
+                                className={i === date.getMonth() ? "selected" : ""}
+                            >
+                                {new Date(0, i).toLocaleString("default", { month: "long" })}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="flex-datepicker-underlay"></div>
+                </div>
+            )}
+            {this.state.showYearPicker && (
+                <div className="flex-datepicker-overlay">
+                    <div className="flex-datepicker-overlay-container">
+                        {Array.from({ length: 201 }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    changeYear(1900 + i);
+                                    this.toggleYearPicker();
+                                }}
+                                className={1900 + i === date.getFullYear() ? "selected" : ""}
+                            >
+                                {1900 + i}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="flex-datepicker-underlay"></div>
+                </div>
+            )}
         </div>
     );
 
@@ -526,7 +625,7 @@ export class ReactDatePicker extends Component {
                     portalId="root-portal"
                     isClearable={this.props.clearable}
                     inline={this.props.inline}
-                    renderCustomHeader={props => <this.CustomHeader {...props} />}
+                    renderCustomHeader={props => <this.customHeader {...props} />}
                 />
                 {!this.props.inline ? (
                     <button
