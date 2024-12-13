@@ -1,7 +1,7 @@
 import React, { Component, createElement } from "react";
 import { Alert } from "./Alert";
 import DatePicker from "react-datepicker";
-import { setHours, setMinutes, parse } from "date-fns";
+import { setHours, setMinutes, setSeconds, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 
 import prevIcon from "../ui/arrow-left.svg";
@@ -248,7 +248,10 @@ export class ReactDatePicker extends Component {
         }
         if (this.props.minTime && this.props.minTime.status === "available") {
             const minTimeString = this.props.minTime.value;
-            const minTime = setHours(setMinutes(now, minTimeString.substring(3, 5)), minTimeString.substring(0, 2));
+            const minTime = setSeconds(
+                setHours(setMinutes(now, minTimeString.substring(3, 5)), minTimeString.substring(0, 2)),
+                0
+            );
             if (this.state.minTime.getTime() !== minTime.getTime()) {
                 this.setState({ minTime });
             }
