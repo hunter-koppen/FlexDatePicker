@@ -3,6 +3,8 @@ import { Alert } from "./Alert";
 import DatePicker from "react-datepicker";
 import { setHours, setMinutes, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
+import prevIcon from "../ui/arrow-left.svg";
+import nextIcon from "../ui/arrow-right.svg";
 const now = new Date();
 
 export class ReactDatePicker extends Component {
@@ -427,6 +429,41 @@ export class ReactDatePicker extends Component {
         }
     };
 
+    CustomHeader = ({
+        date,
+        changeYear,
+        changeMonth,
+        decreaseMonth,
+        increaseMonth,
+        prevMonthButtonDisabled,
+        nextMonthButtonDisabled
+    }) => (
+        <div className="flex-datepicker-header">
+            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled} className="flex-datepicker-arrow">
+                <img src={prevIcon} alt="Previous Month" />
+            </button>
+            <div>
+                <select value={date.getMonth()} onChange={({ target: { value } }) => changeMonth(value)}>
+                    {Array.from({ length: 12 }, (_, i) => (
+                        <option key={i} value={i}>
+                            {new Date(0, i).toLocaleString("default", { month: "long" })}
+                        </option>
+                    ))}
+                </select>
+                <select value={date.getFullYear()} onChange={({ target: { value } }) => changeYear(value)}>
+                    {Array.from({ length: 201 }, (_, i) => (
+                        <option key={i} value={1900 + i}>
+                            {1900 + i}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled} className="flex-datepicker-arrow">
+                <img src={nextIcon} alt="Next Month" />
+            </button>
+        </div>
+    );
+
     render() {
         let highlightDates;
         if (this.props.excludeOrInclude === "exclude" && this.props.highlightExcludedDays) {
@@ -489,6 +526,7 @@ export class ReactDatePicker extends Component {
                     portalId="root-portal"
                     isClearable={this.props.clearable}
                     inline={this.props.inline}
+                    renderCustomHeader={props => <this.CustomHeader {...props} />}
                 />
                 {!this.props.inline ? (
                     <button
