@@ -3,9 +3,11 @@ import { Alert } from "./Alert";
 import DatePicker from "react-datepicker";
 import { setHours, setMinutes, parse } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
+
 import prevIcon from "../ui/arrow-left.svg";
 import nextIcon from "../ui/arrow-right.svg";
 import arrowIcon from "../ui/arrow-up.svg";
+import crossIcon from "../ui/cross-icon.svg";
 const now = new Date();
 
 export class ReactDatePicker extends Component {
@@ -343,7 +345,7 @@ export class ReactDatePicker extends Component {
             }
             if (end === null && this.props.dateAttributeEnd !== undefined) {
                 this.props.dateAttributeEnd.setValue(undefined);
-            } else if (this.props.dateAttributeEnd !== end) {
+            } else if (this.props.dateAttributeEnd && this.props.dateAttributeEnd !== end) {
                 this.props.dateAttributeEnd.setValue(end);
             }
         } else {
@@ -376,10 +378,13 @@ export class ReactDatePicker extends Component {
             const parsedStartDate = start ? parse(start, dateFormat, new Date()) : "";
             const parsedEndDate = end ? parse(end, dateFormat, new Date()) : "";
 
-            if (isNaN(parsedStartDate) || isNaN(parsedEndDate)) {
+            if (isNaN(parsedStartDate)) {
                 this.setState({ invalidDate: true });
             } else {
                 this.setState({ invalidDate: false });
+                if (isNaN(parsedEndDate) && end.trim() !== "") {
+                    this.setState({ dateValueEnd: null });
+                }
             }
         } else {
             if (isNaN(parsedDate) && inputField && inputField.value.trim() !== "") {
@@ -406,9 +411,13 @@ export class ReactDatePicker extends Component {
                     const parsedStartDate = start ? parse(start, dateFormat, new Date()) : NaN;
                     const parsedEndDate = end ? parse(end, dateFormat, new Date()) : NaN;
 
-                    if (isNaN(parsedStartDate) || isNaN(parsedEndDate)) {
+                    if (isNaN(parsedStartDate)) {
                         this.setState({ dateValueStart: now, dateValueEnd: now }, () => {
                             this.setState({ dateValueStart: null, dateValueEnd: null });
+                        });
+                    } else if (isNaN(parsedEndDate) && end.trim() !== "") {
+                        this.setState({ dateValueEnd: now }, () => {
+                            this.setState({ dateValueEnd: null });
                         });
                     }
                 } else {
@@ -623,10 +632,15 @@ export class ReactDatePicker extends Component {
                     showYearPicker={this.props.pickerType === "year"}
                     disabledKeyboardNavigation={true}
                     portalId="root-portal"
-                    isClearable={this.props.clearable}
+                    isClearable={false}
                     inline={this.props.inline}
                     renderCustomHeader={props => <this.customHeader {...props} />}
                 />
+                {!this.props.inline && this.props.clearable && this.state.dateValueStart && (
+                    <button type="button" className="flex-datepicker-clear-icon" onClick={() => this.onChange(null)}>
+                        <img src={crossIcon} alt="Clear" />
+                    </button>
+                )}
                 {!this.props.inline ? (
                     <button
                         type="button"

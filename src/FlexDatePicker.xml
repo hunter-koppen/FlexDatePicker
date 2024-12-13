@@ -19,7 +19,7 @@
                         <attributeType name="DateTime"/>
                     </attributeTypes>
                 </property>
-                <property key="dateAttributeEnd" type="attribute" required="false" onChange="onChangeActionEnd">
+                <property key="dateAttributeEnd" type="attribute" required="true" onChange="onChangeActionEnd">
                     <caption>End range attribute</caption>
                     <description/>
                     <attributeTypes>
