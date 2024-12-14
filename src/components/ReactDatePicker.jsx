@@ -47,20 +47,8 @@ export class ReactDatePicker extends Component {
     componentDidMount() {
         this.setParentClasses();
 
-        let firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
-        if (this.props.overwriteFirstDay && this.props.firstDayOfTheWeek >= 0 && this.props.firstDayOfTheWeek <= 6) {
-            firstDayOfTheWeek = this.props.firstDayOfTheWeek;
-        }
-
-        let minimalDaysInFirstWeek = mx.session.sessionData.locale.minimalDaysInFirstWeek;
-        if (
-            this.props.overwriteMinimalDays &&
-            this.props.minimalDaysInFirstWeek >= 0 &&
-            this.props.minimalDaysInFirstWeek <= 6
-        ) {
-            minimalDaysInFirstWeek = this.props.minimalDaysInFirstWeek;
-        }
-
+        const firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
+        const minimalDaysInFirstWeek = mx.session.sessionData.locale.minimalDaysInFirstWeek;
         const eras = mx.session.sessionData.locale.dates.eras;
         const quarters = ["1", "2", "3", "4"];
         const months = mx.session.sessionData.locale.dates.months;
@@ -75,7 +63,9 @@ export class ReactDatePicker extends Component {
                 dayPeriod: n => dayPeriods[n]
             },
             formatLong: {
-                date: () => mx.session.sessionData.locale.patterns.date
+                date: () => mx.session.sessionData.locale.patterns.date,
+                dateTime: () => mx.session.sessionData.locale.patterns.datetime,
+                time: () => mx.session.sessionData.locale.patterns.time
             },
             match: {},
             options: {
@@ -355,7 +345,7 @@ export class ReactDatePicker extends Component {
     };
 
     onSelect = () => {
-        if (!this.props.dateRange) {
+        if (!this.props.dateRange && this.props.pickerType !== "datetime") {
             this.setState({ open: false });
         }
     };
@@ -602,8 +592,6 @@ export class ReactDatePicker extends Component {
                     showPopperArrow={false}
                     onClickOutside={this.togglePicker}
                     open={this.state.open}
-                    className="form-control"
-                    calendarClassName="flex-datepicker-calendar"
                     showYearDropdown={true}
                     showMonthDropdown={true}
                     dropdownMode="select"
@@ -627,6 +615,10 @@ export class ReactDatePicker extends Component {
                     showMonthYearPicker={this.props.pickerType === "month"}
                     showYearPicker={this.props.pickerType === "year"}
                     disabledKeyboardNavigation={true}
+                    className="form-control"
+                    calendarClassName="flex-datepicker-calendar"
+                    popperClassName="flex-datepicker-popper"
+                    popperPlacement={this.props.pickerType === "time" ? "bottom-end" : "bottom-start"}
                     portalId="root-portal"
                     isClearable={false}
                     inline={this.props.inline}

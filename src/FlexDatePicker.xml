@@ -87,22 +87,6 @@
                     <caption>Show Week Numbers?</caption>
                     <description/>
                 </property>
-                <property key="overwriteFirstDay" type="boolean" defaultValue="false">
-                    <caption>Overwrite first day</caption>
-                    <description>Overwrite first day of the week setting?</description>
-                </property>
-                <property key="firstDayOfTheWeek" type="integer" defaultValue="1">
-                    <caption>First day</caption>
-                    <description>0 = sunday, 1 = monday etc.</description>
-                </property>
-                <property key="overwriteMinimalDays" type="boolean" defaultValue="false">
-                    <caption>Overwrite week one day</caption>
-                    <description>Overwrite the week one day setting?</description>
-                </property>
-                <property key="minimalDaysInFirstWeek" type="integer" defaultValue="4">
-                    <caption>Week one day</caption>
-                    <description>Determines from what day week one starts when using the weeknumbers, 1 = 1 jan, 2 = 2 jan etc.</description>
-                </property>
             </propertyGroup>
             <propertyGroup caption="Disable dates">
                 <property key="minDate" type="expression" defaultValue="" required="false">

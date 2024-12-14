@@ -26,10 +26,7 @@ The required validation and any other validation actions in nanoflows/microflows
 https://github.com/hunter-koppen/FlexDatePicker/issues
 
 ## To Do
-- Overwrite week settings automatically
 - Fix other pickers (next to date)
-- Align picker to the left unless time picker
-- Fix padding-top of picker
 - Fix for brand-primary styling
 - Add appearance settings
     - Improve standard icon, date and time icons seperately
