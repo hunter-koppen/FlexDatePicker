@@ -32,5 +32,3 @@ https://github.com/hunter-koppen/FlexDatePicker/issues
     - Improve standard icon, date and time icons seperately
     - Allow for uploading custom icon
     - Setting for spacing between button and input or not
-- New datepicker type - No Picker (dont show the button, only typing)
-- Sidebar in picker to quickly set a date or range of date (this week or today etc)
