@@ -616,13 +616,20 @@ export class ReactDatePicker extends Component {
                     showYearPicker={this.props.pickerType === "year"}
                     disabledKeyboardNavigation={true}
                     className="form-control"
-                    calendarClassName="flex-datepicker-calendar"
+                    calendarClassName={
+                        this.props.pickerType === "month"
+                            ? "flex-datepicker-calendar react-datepicker--month-only"
+                            : this.props.pickerType === "year"
+                            ? "flex-datepicker-calendar react-datepicker--year-only"
+                            : "flex-datepicker-calendar"
+                    }
                     popperClassName="flex-datepicker-popper"
                     popperPlacement={this.props.pickerType === "time" ? "bottom-end" : "bottom-start"}
                     portalId="root-portal"
                     isClearable={false}
                     inline={this.props.inline}
                     renderCustomHeader={props => <this.customHeader {...props} />}
+                    
                 />
                 {!this.props.inline && this.props.clearable && this.state.dateValueStart && (
                     <button type="button" className="flex-datepicker-clear-icon" onClick={() => this.onChange(null)}>
