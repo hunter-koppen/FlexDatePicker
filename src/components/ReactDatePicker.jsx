@@ -14,6 +14,7 @@ export class ReactDatePicker extends Component {
     constructor(props) {
         super(props);
         this.nodeRef = React.createRef();
+        this.popperRef = React.createRef();
         this.headerRef = React.createRef();
     }
 
@@ -45,7 +46,7 @@ export class ReactDatePicker extends Component {
     };
 
     componentDidMount() {
-        this.setParentClasses();
+        this.setClasses();
 
         const firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
         const minimalDaysInFirstWeek = mx.session.sessionData.locale.minimalDaysInFirstWeek;
@@ -124,7 +125,7 @@ export class ReactDatePicker extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        this.setParentClasses();
+        this.setClasses();
 
         if (this.props.excludeOrInclude === "exclude" && this.props.excludedDates) {
             if (this.props.excludedDates.status === "available") {
@@ -300,7 +301,7 @@ export class ReactDatePicker extends Component {
             // Event was triggered by clicking in the picker, ignore it
             return;
         }
-        const { dateFormat, locale } = this.state;
+        const { dateFormat } = this.state;
         const inputValue = newDate.target ? newDate.target.value : newDate;
 
         if (this.props.dateRange) {
@@ -385,7 +386,7 @@ export class ReactDatePicker extends Component {
 
     onBlur = () => {
         const inputField = this.nodeRef.current.querySelector(".form-control");
-        const { dateFormat, locale } = this.state;
+        const { dateFormat } = this.state;
         let parsedDate = null;
 
         if (inputField && inputField.value.trim() !== "") {
@@ -456,7 +457,7 @@ export class ReactDatePicker extends Component {
         }
     };
 
-    setParentClasses = () => {
+    setClasses = () => {
         if (this.nodeRef.current) {
             const parentNode = this.nodeRef.current.parentNode;
             parentNode.classList.add("mx-datepicker");
@@ -465,6 +466,16 @@ export class ReactDatePicker extends Component {
                 parentNode.classList.add("has-error");
             } else {
                 parentNode.classList.remove("has-error");
+            }
+            const pickerElement = parentNode.querySelector(".react-datepicker");
+            if (pickerElement) {
+                pickerElement.classList.remove("react-datepicker");
+            }
+        }
+        if (this.popperRef.current) {
+            const pickerElement = this.popperRef.current.querySelector(".react-datepicker");
+            if (pickerElement) {
+                pickerElement.classList.remove("react-datepicker");
             }
         }
     };
@@ -609,6 +620,8 @@ export class ReactDatePicker extends Component {
         );
     };
 
+    renderPopperContainer = ({ children }) => <div ref={this.popperRef}>{children}</div>;
+
     render() {
         let highlightDates;
         if (this.props.excludeOrInclude === "exclude" && this.props.highlightExcludedDays) {
@@ -680,6 +693,7 @@ export class ReactDatePicker extends Component {
                     isClearable={false}
                     inline={this.props.inline}
                     renderCustomHeader={props => <this.customHeader {...props} />}
+                    popperContainer={this.renderPopperContainer}
                 />
                 {!this.props.inline && this.props.clearable && this.state.dateValueStart && (
                     <button type="button" className="flex-datepicker-clear-icon" onClick={() => this.onChange(null)}>

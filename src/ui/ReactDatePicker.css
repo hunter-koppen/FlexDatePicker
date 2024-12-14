@@ -3,13 +3,14 @@
 }
 .flex-datepicker-calendar {
     padding: 16px;
-    box-shadow: 0px 4px 8px rgba(5, 36, 97, 0.06);
+    box-shadow: 0px 4px 8px rgba(5, 36, 97, 0.1);
     border-radius: 12px;
     border: none;
     background-color: white;
     font-family: inherit;
     overflow: hidden;
     display: flex;
+    position: relative;
 }
 .flex-datepicker-calendar *::-webkit-scrollbar {
     width: 12px;
@@ -486,7 +487,7 @@
     .react-datepicker__time
     .react-datepicker__time-box
     .react-datepicker__time-list {
-    height: calc(268px + 1.7rem / 2);
+    height: 255px !important;
 }
 .flex-datepicker-calendar
     .react-datepicker__time-container
@@ -495,6 +496,9 @@
     .react-datepicker__time-list
     .react-datepicker__time-list-item {
     border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .flex-datepicker-calendar
     .react-datepicker__time-container
@@ -643,5 +647,5 @@
 }
 .flex-datepicker-popper {
     padding: 0 !important;
-    z-index: 999;
+    z-index: 999 !important;
 }
