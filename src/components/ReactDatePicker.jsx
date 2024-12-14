@@ -52,13 +52,16 @@ export class ReactDatePicker extends Component {
         const eras = mx.session.sessionData.locale.dates.eras;
         const quarters = ["1", "2", "3", "4"];
         const months = mx.session.sessionData.locale.dates.months;
+        const shortMonths = mx.session.sessionData.locale.dates.shortMonths;
         const days = mx.session.sessionData.locale.dates.shortWeekdays;
         const dayPeriods = mx.session.sessionData.locale.dates.dayPeriods;
-        const locale = {
+
+        const customLocale = {
             localize: {
                 era: n => eras[n],
                 quarter: n => quarters[n],
                 month: n => months[n],
+                shortMonth: n => shortMonths[n],
                 day: n => days[n],
                 dayPeriod: n => dayPeriods[n]
             },
@@ -67,7 +70,16 @@ export class ReactDatePicker extends Component {
                 dateTime: () => mx.session.sessionData.locale.patterns.datetime,
                 time: () => mx.session.sessionData.locale.patterns.time
             },
-            match: {},
+            match: {
+                month: (string) => {
+                    const matchIndex = months.findIndex(month => month.toLowerCase() === string.toLowerCase());
+                    return matchIndex !== -1 ? { value: matchIndex } : null;
+                },
+                shortMonth: (string) => {
+                    const matchIndex = shortMonths.findIndex(month => month.toLowerCase() === string.toLowerCase());
+                    return matchIndex !== -1 ? { value: matchIndex } : null;
+                }
+            },
             options: {
                 weekStartsOn: firstDayOfTheWeek,
                 firstWeekContainsDate: minimalDaysInFirstWeek
@@ -105,7 +117,7 @@ export class ReactDatePicker extends Component {
 
         this.setState({
             firstDayOfTheWeek,
-            locale,
+            locale: customLocale,
             dateFormat,
             timeFormat
         });
@@ -288,7 +300,7 @@ export class ReactDatePicker extends Component {
             // Event was triggered by clicking in the picker, ignore it
             return;
         }
-        const { dateFormat } = this.state;
+        const { dateFormat, locale } = this.state;
         const inputValue = newDate.target ? newDate.target.value : newDate;
 
         if (this.props.dateRange) {
@@ -373,7 +385,7 @@ export class ReactDatePicker extends Component {
 
     onBlur = () => {
         const inputField = this.nodeRef.current.querySelector(".form-control");
-        const { dateFormat } = this.state;
+        const { dateFormat, locale } = this.state;
         let parsedDate = null;
 
         if (inputField && inputField.value.trim() !== "") {
