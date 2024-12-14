@@ -71,11 +71,11 @@ export class ReactDatePicker extends Component {
                 time: () => mx.session.sessionData.locale.patterns.time
             },
             match: {
-                month: (string) => {
+                month: string => {
                     const matchIndex = months.findIndex(month => month.toLowerCase() === string.toLowerCase());
                     return matchIndex !== -1 ? { value: matchIndex } : null;
                 },
-                shortMonth: (string) => {
+                shortMonth: string => {
                     const matchIndex = shortMonths.findIndex(month => month.toLowerCase() === string.toLowerCase());
                     return matchIndex !== -1 ? { value: matchIndex } : null;
                 }
