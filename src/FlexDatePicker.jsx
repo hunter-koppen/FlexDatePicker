@@ -1,7 +1,7 @@
 import { Component, createElement } from "react";
 
 import { ReactDatePicker } from "./components/ReactDatePicker";
-import "./ui/ReactDatePicker.scss";
+import "./ui/ReactDatePicker.css";
 
 export class FlexDatePicker extends Component {
     onEnterHandler = this.onEnter.bind(this);
