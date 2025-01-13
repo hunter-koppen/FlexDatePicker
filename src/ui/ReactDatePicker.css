@@ -61,6 +61,16 @@
     line-height: 145%;
     font-weight: bold;
 }
+.flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-header-button img {
+    transition: transform 0.2s ease;
+}
+.flex-datepicker-calendar
+    .react-datepicker__header
+    .flex-datepicker-header
+    .flex-datepicker-header-button:not(.open)
+    img {
+    transform: rotate(180deg);
+}
 .flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-overlay {
     position: absolute;
     top: 62px;
@@ -245,6 +255,16 @@
 }
 .flex-datepicker-calendar
     .react-datepicker__day-names
+    .react-datepicker__day.react-datepicker__day--in-range:nth-child(1),
+.flex-datepicker-calendar .react-datepicker__week .react-datepicker__day.react-datepicker__day--in-range:nth-child(1),
+.flex-datepicker-calendar
+    .react-datepicker__day-names
+    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1),
+.flex-datepicker-calendar
+    .react-datepicker__week
+    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1),
+.flex-datepicker-calendar
+    .react-datepicker__day-names
     .react-datepicker__day.react-datepicker__day--in-range:nth-child(2),
 .flex-datepicker-calendar .react-datepicker__week .react-datepicker__day.react-datepicker__day--in-range:nth-child(2),
 .flex-datepicker-calendar
@@ -256,6 +276,18 @@
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
+.flex-datepicker-calendar
+    .react-datepicker__day-names
+    .react-datepicker__day.react-datepicker__day--in-range:nth-child(1)::before,
+.flex-datepicker-calendar
+    .react-datepicker__week
+    .react-datepicker__day.react-datepicker__day--in-range:nth-child(1)::before,
+.flex-datepicker-calendar
+    .react-datepicker__day-names
+    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1)::before,
+.flex-datepicker-calendar
+    .react-datepicker__week
+    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1)::before,
 .flex-datepicker-calendar
     .react-datepicker__day-names
     .react-datepicker__day.react-datepicker__day--in-range:nth-child(2)::before,
@@ -648,12 +680,4 @@
 .flex-datepicker-popper {
     padding: 0 !important;
     z-index: 999 !important;
-}
-
-.flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-header-button img {
-    transition: transform 0.2s ease;
-}
-
-.flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-header-button:not(.open) img {
-    transform: rotate(180deg);
 }
