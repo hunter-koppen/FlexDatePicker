@@ -3,6 +3,7 @@ import { hidePropertyIn, changePropertyIn } from "@mendix/pluggable-widgets-tool
 export function getProperties(values, defaultProperties) {
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
+        hidePropertyIn(defaultProperties, values, "onChangeActionEnd");
         changePropertyIn(
             defaultProperties,
             values,
@@ -33,9 +34,6 @@ export function getProperties(values, defaultProperties) {
         hidePropertyIn(defaultProperties, values, "excludedDates");
         hidePropertyIn(defaultProperties, values, "excludedDatesAttribute");
         hidePropertyIn(defaultProperties, values, "highlightExcludedDays");
-    }
-    if (values.dateRange === false) {
-        hidePropertyIn(defaultProperties, values, "onChangeActionEnd");
     }
     if (values.required === false) {
         hidePropertyIn(defaultProperties, values, "requiredMessage");
