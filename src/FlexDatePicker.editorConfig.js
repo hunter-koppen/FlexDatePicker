@@ -18,7 +18,7 @@ export function getProperties(values, defaultProperties) {
         hidePropertyIn(defaultProperties, values, "minTime");
         hidePropertyIn(defaultProperties, values, "maxTime");
         hidePropertyIn(defaultProperties, values, "timeInterval");
-    } else if (values.pickerType === "month" || values.pickerType === "year") {
+    } else if (values.pickerType === "year") {
         hidePropertyIn(defaultProperties, values, "showWeekNumbers");
         hidePropertyIn(defaultProperties, values, "timeTranslation");
         hidePropertyIn(defaultProperties, values, "minTime");

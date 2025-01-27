@@ -676,14 +676,11 @@ export class ReactDatePicker extends Component {
                     maxTime={this.state.maxTime}
                     showTimeSelect={this.props.pickerType === "time" || this.props.pickerType === "datetime"}
                     showTimeSelectOnly={this.props.pickerType === "time"}
-                    showMonthYearPicker={this.props.pickerType === "month"}
                     showYearPicker={this.props.pickerType === "year"}
                     disabledKeyboardNavigation={true}
                     className="form-control"
                     calendarClassName={
-                        this.props.pickerType === "month"
-                            ? "flex-datepicker-calendar react-datepicker--month-only"
-                            : this.props.pickerType === "year"
+                        this.props.pickerType === "year"
                             ? "flex-datepicker-calendar react-datepicker--year-only"
                             : "flex-datepicker-calendar"
                     }

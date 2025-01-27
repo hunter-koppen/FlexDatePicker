@@ -39,7 +39,6 @@
                         <enumerationValue key="date">Date</enumerationValue>
                         <enumerationValue key="time">Time</enumerationValue>
                         <enumerationValue key="datetime">Datetime</enumerationValue>
-                        <enumerationValue key="month">Month</enumerationValue>
                         <enumerationValue key="year">Year</enumerationValue>
                     </enumerationValues>
                 </property>
@@ -157,6 +156,34 @@
                     <description>Time interval in minutes</description>
                 </property>
             </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Presets">
+            <property key="presetList" type="object" isList="true" required="false">
+                <caption>Presets</caption>
+                <description />
+                <properties>
+                    <propertyGroup caption="Properties">
+                        <property key="presetName" type="textTemplate" required="true">
+                            <caption>Name</caption>
+                            <description />
+                        </property>
+                        <property key="presetRange" type="enumeration" defaultValue="days">
+                            <caption>Range</caption>
+                            <description/>
+                            <enumerationValues>
+                                <enumerationValue key="days">Days</enumerationValue>
+                                <enumerationValue key="weeks">Weeks</enumerationValue>
+                                <enumerationValue key="months">Months</enumerationValue>
+                                <enumerationValue key="years">Years</enumerationValue>
+                            </enumerationValues>
+                        </property>
+                        <property key="presetOffset" type="integer" defaultValue="1">
+                            <caption>Offset</caption>
+                            <description>When clicking on the preset, the date will be offset by this amount based on the current datetime (not the selected date).</description>
+                        </property>
+                    </propertyGroup>
+                </properties>
+            </property>
         </propertyGroup>
         <propertyGroup caption="Events">
             <property key="onEnterAction" type="action" required="false">
