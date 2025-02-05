@@ -1,18 +1,16 @@
 ## Flex Date Picker
-Datepicker with more flexible options than the default Mendix Datepicker
+Datepicker with more flexible options than the default Mendix Datepicker that also looks great!
 
 ## Features
 Next to the standard functionality like a placeholder and input events this widget also supports:
+- Date ranges
 - Show weeknumbers
 - Disable/Exclude or Include days in the picker itself (specify exactly which days are available for picking)
-- Date ranges
 - Time picker in combination with a datepicker
 - Time only picker
-- Month picker
 - Year picker
 - Show the picker inline on the page
-
-It also takes all the date formatting and language from the Mendix session and validation messages on the input also work correctly.
+- Presets
 
 ## Usage
 Simply drag the widget on a page with a date attribute and attach it to the widget
