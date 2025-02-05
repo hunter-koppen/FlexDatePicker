@@ -1,6 +1,7 @@
 import { hidePropertyIn, changePropertyIn } from "@mendix/pluggable-widgets-tools";
 
 export function getProperties(values, defaultProperties) {
+    hidePropertyIn(defaultProperties, values, "presetList"); // Hide presets for now
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
         hidePropertyIn(defaultProperties, values, "onChangeActionEnd");
