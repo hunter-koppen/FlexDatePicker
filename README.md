@@ -28,13 +28,7 @@ If you wish to change the primary color in the picker simply add the following c
 :root {
     --flex-calendar-primary: #264ae5;
 }
+```
 
 ## Issues, suggestions and feature requests
 https://github.com/hunter-koppen/FlexDatePicker/issues
-
-## To Do
-- Fix month picker for non english
-- Add appearance settings
-    - Improve standard icon, date and time icons seperately
-    - Allow for uploading custom icon
-    - Setting for spacing between button and input or not
