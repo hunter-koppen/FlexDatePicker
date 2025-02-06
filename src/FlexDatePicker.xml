@@ -177,9 +177,13 @@
                                 <enumerationValue key="years">Years</enumerationValue>
                             </enumerationValues>
                         </property>
-                        <property key="presetOffset" type="integer" defaultValue="1">
-                            <caption>Offset</caption>
-                            <description>When clicking on the preset, the date will be offset by this amount based on the current datetime (not the selected date).</description>
+                        <property key="presetOffsetStart" type="integer" defaultValue="1">
+                            <caption>Offset start</caption>
+                            <description/>
+                        </property>
+                        <property key="presetOffsetEnd" type="integer" defaultValue="2">
+                            <caption>Offset end</caption>
+                            <description>When clicking on the preset, the date will be offset by this amount based on the current datetime.</description>
                         </property>
                     </propertyGroup>
                 </properties>

@@ -681,3 +681,21 @@
     padding: 0 !important;
     z-index: 999 !important;
 }
+.flex-datepicker-container {
+    display: flex;
+    gap: 16px;
+}
+.flex-datepicker-container .flex-datepicker-presets {
+    display: flex;
+    flex-direction: column;
+    padding-right: 16px;
+    border-right: 1px solid #e0e4eb;
+}
+.flex-datepicker-container .flex-datepicker-presets .flex-datepicker-preset-button {
+    display: flex;
+    padding: 4px 8px;
+    font-weight: bold;
+    line-height: 140%;
+    white-space: nowrap;
+    cursor: pointer;
+}

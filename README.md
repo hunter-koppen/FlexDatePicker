@@ -10,6 +10,7 @@ Next to the standard functionality like a placeholder and input events this widg
 - Time only picker
 - Year picker
 - Show the picker inline on the page
+- Presets
 
 ## Usage
 Simply drag the widget on a page with a date attribute and attach it to the widget

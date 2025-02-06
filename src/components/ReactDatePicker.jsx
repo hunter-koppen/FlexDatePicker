@@ -1,13 +1,16 @@
 import React, { Component, createElement } from "react";
 import { Alert } from "./Alert";
 import DatePicker from "react-datepicker";
-import { setHours, setMinutes, setSeconds, parse } from "date-fns";
+import { parse, setHours, setMinutes, setSeconds } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 
 import prevIcon from "../ui/arrow-left.svg";
 import nextIcon from "../ui/arrow-right.svg";
 import arrowIcon from "../ui/arrow-up.svg";
 import crossIcon from "../ui/cross-icon.svg";
+
+/* global mx */
+
 const now = new Date();
 
 export class ReactDatePicker extends Component {
@@ -538,6 +541,112 @@ export class ReactDatePicker extends Component {
         });
     };
 
+    handlePresetClick = preset => {
+        const currentDate = new Date();
+        let startDate = new Date(currentDate);
+        let endDate = new Date(currentDate);
+
+        // Calculate the offset based on preset type and direction
+        const calculateOffset = (date, offset, unit) => {
+            const newDate = new Date(date);
+            const firstDayOfWeek = mx.session.sessionData.locale.firstDayOfWeek; // 0 = Sunday, 1 = Monday, etc.
+
+            switch (unit) {
+                case "days":
+                    newDate.setDate(date.getDate() + offset);
+                    break;
+
+                case "weeks":
+                    // Only apply the offset once
+                    if (offset === preset.presetOffsetEnd) {
+                        // For end date, first move to the start of the target week
+                        newDate.setDate(date.getDate() + (offset - 1) * 7);
+
+                        // Then adjust to the end of that week
+                        const currentDay = newDate.getDay();
+                        const daysToEnd =
+                            firstDayOfWeek > currentDay
+                                ? 6 - (7 - (firstDayOfWeek - currentDay))
+                                : 6 - (currentDay - firstDayOfWeek);
+                        newDate.setDate(newDate.getDate() + daysToEnd);
+                    } else {
+                        // For start date, move to start of the target week
+                        newDate.setDate(date.getDate() + offset * 7);
+
+                        const currentDay = newDate.getDay();
+                        const diff =
+                            currentDay >= firstDayOfWeek
+                                ? currentDay - firstDayOfWeek
+                                : 7 - (firstDayOfWeek - currentDay);
+                        newDate.setDate(newDate.getDate() - diff);
+                    }
+                    break;
+
+                case "months":
+                    newDate.setMonth(newDate.getMonth() + offset);
+
+                    // Set to first or last day of the month
+                    if (offset === preset.presetOffsetEnd) {
+                        // For end date, set to last day of month
+                        newDate.setDate(0);
+                    } else {
+                        // For start date, set to first day of month
+                        newDate.setDate(1);
+                    }
+                    break;
+
+                case "years":
+                    newDate.setFullYear(newDate.getFullYear() + offset);
+
+                    // Set to first or last day of the year
+                    if (offset === preset.presetOffsetEnd) {
+                        // For end date, set to December 31st
+                        newDate.setMonth(11, 31);
+                    } else {
+                        // For start date, set to January 1st
+                        newDate.setMonth(0, 1);
+                    }
+                    break;
+
+                default:
+                    // Handle default case
+                    break;
+            }
+            return newDate;
+        };
+
+        if (this.props.dateRange) {
+            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange);
+            endDate = calculateOffset(currentDate, preset.presetOffsetEnd, preset.presetRange);
+            this.onChange([startDate, endDate]);
+        } else {
+            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange);
+            this.onChange(startDate);
+        }
+
+        this.togglePicker();
+    };
+
+    renderPresets = () => {
+        if (!this.props.presetList || this.props.presetList.length === 0) {
+            return null;
+        }
+
+        return (
+            <div className="flex-datepicker-presets">
+                {this.props.presetList.map((preset, index) => (
+                    <span
+                        key={index}
+                        className="flex-datepicker-preset-button"
+                        onClick={() => this.handlePresetClick(preset)}
+                    >
+                        {preset.presetName.value}
+                    </span>
+                ))}
+            </div>
+        );
+    };
+
     customHeader = ({
         date,
         changeYear,
@@ -622,6 +731,15 @@ export class ReactDatePicker extends Component {
 
     renderPopperContainer = ({ children }) => <div ref={this.popperRef}>{children}</div>;
 
+    renderCalendarContainer = ({ className, children }) => (
+        <div className={className}>
+            <div className="flex-datepicker-container">
+                {this.renderPresets()}
+                {children}
+            </div>
+        </div>
+    );
+
     render() {
         let highlightDates;
         if (this.props.excludeOrInclude === "exclude" && this.props.highlightExcludedDays) {
@@ -691,6 +809,7 @@ export class ReactDatePicker extends Component {
                     inline={this.props.inline}
                     renderCustomHeader={props => <this.customHeader {...props} />}
                     popperContainer={this.renderPopperContainer}
+                    calendarContainer={this.renderCalendarContainer}
                 />
                 {!this.props.inline && this.props.clearable && this.state.dateValueStart && (
                     <button type="button" className="flex-datepicker-clear-icon" onClick={() => this.onChange(null)}>

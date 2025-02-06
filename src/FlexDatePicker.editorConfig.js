@@ -1,10 +1,30 @@
-import { hidePropertyIn, changePropertyIn } from "@mendix/pluggable-widgets-tools";
+import { changePropertyIn, hideNestedPropertiesIn, hidePropertyIn } from "@mendix/pluggable-widgets-tools";
 
 export function getProperties(values, defaultProperties) {
-    hidePropertyIn(defaultProperties, values, "presetList"); // Hide presets for now
     if (values.dateRange === false) {
         hidePropertyIn(defaultProperties, values, "dateAttributeEnd");
         hidePropertyIn(defaultProperties, values, "onChangeActionEnd");
+        values.presetList.forEach((preset, index) =>
+            hideNestedPropertiesIn(defaultProperties, values, "presetList", index, ["presetOffsetEnd"])
+        );
+        changePropertyIn(
+            defaultProperties,
+            values,
+            prop => {
+                prop.objects?.forEach(object => {
+                    object.properties?.forEach(propertyGroup => {
+                        propertyGroup.properties?.forEach(property => {
+                            if (property.key === "presetOffsetStart") {
+                                property.caption = "Offset";
+                                property.description =
+                                    "When clicking on the preset, the date will be offset by this amount based on the current datetime.";
+                            }
+                        });
+                    });
+                });
+            },
+            "presetList"
+        );
         changePropertyIn(
             defaultProperties,
             values,
