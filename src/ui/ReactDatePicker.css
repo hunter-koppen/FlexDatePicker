@@ -73,9 +73,9 @@
 }
 .flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-overlay {
     position: absolute;
-    top: 62px;
-    width: 100%;
-    height: calc(100% - 62px);
+    top: 46px;
+    width: calc(100% + 32px);
+    height: calc(100% - 30px);
     z-index: 999;
     margin-left: -16px;
     margin-right: -16px;
@@ -579,6 +579,7 @@
 }
 .flex-datepicker-calendar .react-datepicker__month-container {
     width: 100%;
+    position: relative;
 }
 .flex-datepicker-calendar .react-datepicker__month-container .react-datepicker__monthPicker {
     gap: 8px;
@@ -634,31 +635,27 @@
     .flex-datepicker-overlay {
     top: 50px;
     height: calc(100% - 50px);
+    width: 100%;
 }
-.flex-datepicker-calendar.react-datepicker--month-only,
 .flex-datepicker-calendar.react-datepicker--year-only {
     min-width: 292px;
 }
-.flex-datepicker-calendar.react-datepicker--month-only .flex-datepicker-header,
+.flex-datepicker-calendar.react-datepicker--year-only .flex-datepicker-container {
+    width: 100%;
+}
 .flex-datepicker-calendar.react-datepicker--year-only .flex-datepicker-header {
     justify-content: unset;
     align-items: unset;
     flex-direction: column;
     padding: 0;
 }
-.flex-datepicker-calendar.react-datepicker--month-only .flex-datepicker-header .flex-datepicker-header-button,
 .flex-datepicker-calendar.react-datepicker--year-only .flex-datepicker-header .flex-datepicker-header-button {
     pointer-events: none;
 }
-.flex-datepicker-calendar.react-datepicker--month-only .flex-datepicker-header .flex-datepicker-header-button img,
 .flex-datepicker-calendar.react-datepicker--year-only .flex-datepicker-header .flex-datepicker-header-button img {
     display: none;
 }
-.flex-datepicker-calendar.react-datepicker--month-only .flex-datepicker-arrow,
 .flex-datepicker-calendar.react-datepicker--year-only .flex-datepicker-arrow {
-    display: none;
-}
-.flex-datepicker-calendar.react-datepicker--month-only .flex-datepicker-header-button:last-child {
     display: none;
 }
 .flex-datepicker-calendar.react-datepicker--year-only {
