@@ -547,9 +547,9 @@ export class ReactDatePicker extends Component {
         let endDate = new Date(currentDate);
 
         // Calculate the offset based on preset type and direction
-        const calculateOffset = (date, offset, unit) => {
+        const calculateOffset = (date, offset, unit, isEndDate) => {
             const newDate = new Date(date);
-            const firstDayOfWeek = mx.session.sessionData.locale.firstDayOfWeek; // 0 = Sunday, 1 = Monday, etc.
+            const firstDayOfWeek = mx.session.sessionData.locale.firstDayOfWeek;
 
             switch (unit) {
                 case "days":
@@ -557,8 +557,7 @@ export class ReactDatePicker extends Component {
                     break;
 
                 case "weeks":
-                    // Only apply the offset once
-                    if (offset === preset.presetOffsetEnd) {
+                    if (isEndDate) {
                         // For end date, first move to the start of the target week
                         newDate.setDate(date.getDate() + (offset - 1) * 7);
 
@@ -584,11 +583,9 @@ export class ReactDatePicker extends Component {
 
                 case "months":
                     newDate.setMonth(newDate.getMonth() + offset);
-
-                    // Set to first or last day of the month
-                    if (offset === preset.presetOffsetEnd) {
+                    if (isEndDate) {
                         // For end date, set to last day of month
-                        newDate.setDate(0);
+                        newDate.setMonth(newDate.getMonth() + 1, 0);
                     } else {
                         // For start date, set to first day of month
                         newDate.setDate(1);
@@ -597,13 +594,11 @@ export class ReactDatePicker extends Component {
 
                 case "years":
                     newDate.setFullYear(newDate.getFullYear() + offset);
-
-                    // Set to first or last day of the year
-                    if (offset === preset.presetOffsetEnd) {
-                        // For end date, set to December 31st
+                    if (isEndDate) {
+                        // Set to December 31st of that year
                         newDate.setMonth(11, 31);
                     } else {
-                        // For start date, set to January 1st
+                        // Set to January 1st of that year
                         newDate.setMonth(0, 1);
                     }
                     break;
@@ -616,11 +611,11 @@ export class ReactDatePicker extends Component {
         };
 
         if (this.props.dateRange) {
-            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange);
-            endDate = calculateOffset(currentDate, preset.presetOffsetEnd, preset.presetRange);
+            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange, false);
+            endDate = calculateOffset(currentDate, preset.presetOffsetEnd, preset.presetRange, true);
             this.onChange([startDate, endDate]);
         } else {
-            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange);
+            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange, false);
             this.onChange(startDate);
         }
 

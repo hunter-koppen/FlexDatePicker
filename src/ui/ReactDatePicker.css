@@ -3,14 +3,13 @@
 }
 .flex-datepicker-calendar {
     padding: 16px;
-    box-shadow: 0px 4px 8px rgba(5, 36, 97, 0.1);
+    box-shadow: 0px 4px 8px rgba(5, 36, 97, 0.06);
     border-radius: 12px;
     border: none;
     background-color: white;
     font-family: inherit;
     overflow: hidden;
     display: flex;
-    position: relative;
 }
 .flex-datepicker-calendar *::-webkit-scrollbar {
     width: 12px;
@@ -61,18 +60,11 @@
     line-height: 145%;
     font-weight: bold;
 }
-.flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-header-button img {
-    transition: transform 0.2s ease;
-}
-.flex-datepicker-calendar
-    .react-datepicker__header
-    .flex-datepicker-header
-    .flex-datepicker-header-button:not(.open)
-    img {
-    transform: rotate(180deg);
-}
 .flex-datepicker-calendar .react-datepicker__header .flex-datepicker-header .flex-datepicker-overlay {
     position: absolute;
+    top: 46px;
+    width: calc(100% + 32px);
+    height: calc(100% - 30px);
     top: 46px;
     width: calc(100% + 32px);
     height: calc(100% - 30px);
@@ -255,16 +247,6 @@
 }
 .flex-datepicker-calendar
     .react-datepicker__day-names
-    .react-datepicker__day.react-datepicker__day--in-range:nth-child(1),
-.flex-datepicker-calendar .react-datepicker__week .react-datepicker__day.react-datepicker__day--in-range:nth-child(1),
-.flex-datepicker-calendar
-    .react-datepicker__day-names
-    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1),
-.flex-datepicker-calendar
-    .react-datepicker__week
-    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1),
-.flex-datepicker-calendar
-    .react-datepicker__day-names
     .react-datepicker__day.react-datepicker__day--in-range:nth-child(2),
 .flex-datepicker-calendar .react-datepicker__week .react-datepicker__day.react-datepicker__day--in-range:nth-child(2),
 .flex-datepicker-calendar
@@ -276,18 +258,6 @@
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
-.flex-datepicker-calendar
-    .react-datepicker__day-names
-    .react-datepicker__day.react-datepicker__day--in-range:nth-child(1)::before,
-.flex-datepicker-calendar
-    .react-datepicker__week
-    .react-datepicker__day.react-datepicker__day--in-range:nth-child(1)::before,
-.flex-datepicker-calendar
-    .react-datepicker__day-names
-    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1)::before,
-.flex-datepicker-calendar
-    .react-datepicker__week
-    .react-datepicker__day.react-datepicker__day--in-selecting-range:nth-child(1)::before,
 .flex-datepicker-calendar
     .react-datepicker__day-names
     .react-datepicker__day.react-datepicker__day--in-range:nth-child(2)::before,
@@ -519,7 +489,7 @@
     .react-datepicker__time
     .react-datepicker__time-box
     .react-datepicker__time-list {
-    height: 255px !important;
+    height: calc(268px + 1.7rem / 2);
 }
 .flex-datepicker-calendar
     .react-datepicker__time-container
@@ -528,9 +498,6 @@
     .react-datepicker__time-list
     .react-datepicker__time-list-item {
     border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 .flex-datepicker-calendar
     .react-datepicker__time-container
@@ -579,6 +546,7 @@
 }
 .flex-datepicker-calendar .react-datepicker__month-container {
     width: 100%;
+    position: relative;
     position: relative;
 }
 .flex-datepicker-calendar .react-datepicker__month-container .react-datepicker__monthPicker {
@@ -636,6 +604,7 @@
     top: 50px;
     height: calc(100% - 50px);
     width: 100%;
+    width: 100%;
 }
 .flex-datepicker-calendar.react-datepicker--year-only {
     min-width: 292px;
@@ -676,23 +645,5 @@
 }
 .flex-datepicker-popper {
     padding: 0 !important;
-    z-index: 999 !important;
-}
-.flex-datepicker-container {
-    display: flex;
-    gap: 16px;
-}
-.flex-datepicker-container .flex-datepicker-presets {
-    display: flex;
-    flex-direction: column;
-    padding-right: 16px;
-    border-right: 1px solid #e0e4eb;
-}
-.flex-datepicker-container .flex-datepicker-presets .flex-datepicker-preset-button {
-    display: flex;
-    padding: 4px 8px;
-    font-weight: bold;
-    line-height: 140%;
-    white-space: nowrap;
-    cursor: pointer;
+    z-index: 999;
 }
