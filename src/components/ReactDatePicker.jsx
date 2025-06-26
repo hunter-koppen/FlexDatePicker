@@ -542,9 +542,10 @@ export class ReactDatePicker extends Component {
     };
 
     handlePresetClick = preset => {
-        const currentDate = new Date();
-        let startDate = new Date(currentDate);
-        let endDate = new Date(currentDate);
+        let startDate = new Date();
+        startDate.setHours(0, 0, 0, 0); // Set to start of the day
+        let endDate = new Date();
+        endDate.setHours(23, 59, 59, 0); // Set to last second of the day
 
         // Calculate the offset based on preset type and direction
         const calculateOffset = (date, offset, unit, isEndDate) => {
@@ -559,7 +560,7 @@ export class ReactDatePicker extends Component {
                 case "weeks":
                     if (isEndDate) {
                         // For end date, first move to the start of the target week
-                        newDate.setDate(date.getDate() + (offset - 1) * 7);
+                        newDate.setDate(date.getDate() + offset * 7);
 
                         // Then adjust to the end of that week
                         const currentDay = newDate.getDay();
@@ -611,11 +612,11 @@ export class ReactDatePicker extends Component {
         };
 
         if (this.props.dateRange) {
-            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange, false);
-            endDate = calculateOffset(currentDate, preset.presetOffsetEnd, preset.presetRange, true);
+            startDate = calculateOffset(startDate, preset.presetOffsetStart, preset.presetRange, false);
+            endDate = calculateOffset(endDate, preset.presetOffsetEnd, preset.presetRange, true);
             this.onChange([startDate, endDate]);
         } else {
-            startDate = calculateOffset(currentDate, preset.presetOffsetStart, preset.presetRange, false);
+            startDate = calculateOffset(startDate, preset.presetOffsetStart, preset.presetRange, false);
             this.onChange(startDate);
         }
 
