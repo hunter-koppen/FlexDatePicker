@@ -45,6 +45,7 @@ export class FlexDatePicker extends Component {
                 clearable={this.props.clearable}
                 invalidDateMessage={this.props.invalidDateMessage.value}
                 presetList={this.props.presetList}
+                widgetName={this.props.name}
             />
         );
     }

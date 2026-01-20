@@ -128,6 +128,7 @@ export class ReactDatePicker extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log(this.props.widgetName);
         this.setClasses();
 
         if (this.props.excludeOrInclude === "exclude" && this.props.excludedDates) {
@@ -798,7 +799,11 @@ export class ReactDatePicker extends Component {
                             ? "flex-datepicker-calendar react-datepicker--year-only"
                             : "flex-datepicker-calendar"
                     }
-                    popperClassName="flex-datepicker-popper"
+                    popperClassName={
+                        this.props.widgetName
+                            ? this.props.widgetName + " flex-datepicker-popper"
+                            : "flex-datepicker-popper"
+                    }
                     popperPlacement={this.props.pickerType === "time" ? "bottom-end" : "bottom-start"}
                     portalId="root-portal"
                     isClearable={false}
