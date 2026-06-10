@@ -812,7 +812,7 @@ export class ReactDatePicker extends Component {
                     popperContainer={this.renderPopperContainer}
                     calendarContainer={this.renderCalendarContainer}
                 />
-                {!this.props.inline && this.props.clearable && this.state.dateValueStart && (
+                {!this.props.inline && this.props.clearable && !this.state.readOnly && this.state.dateValueStart && (
                     <button type="button" className="flex-datepicker-clear-icon" onClick={() => this.onChange(null)}>
                         <img src={crossIcon} alt="Clear" />
                     </button>
