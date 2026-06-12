@@ -76,12 +76,22 @@ export class ReactDatePicker extends Component {
             },
             match: {
                 month: string => {
-                    const matchIndex = months.findIndex(month => month.toLowerCase() === string.toLowerCase());
-                    return matchIndex !== -1 ? { value: matchIndex } : null;
+                    for (let i = 0; i < months.length; i++) {
+                        const m = months[i];
+                        if (string.toLowerCase().startsWith(m.toLowerCase())) {
+                            return { value: i, rest: string.slice(m.length) };
+                        }
+                    }
+                    return null;
                 },
                 shortMonth: string => {
-                    const matchIndex = shortMonths.findIndex(month => month.toLowerCase() === string.toLowerCase());
-                    return matchIndex !== -1 ? { value: matchIndex } : null;
+                    for (let i = 0; i < shortMonths.length; i++) {
+                        const m = shortMonths[i];
+                        if (string.toLowerCase().startsWith(m.toLowerCase())) {
+                            return { value: i, rest: string.slice(m.length) };
+                        }
+                    }
+                    return null;
                 }
             },
             options: {
@@ -310,8 +320,8 @@ export class ReactDatePicker extends Component {
 
         if (this.props.dateRange) {
             const [start, end] = inputValue.split(" - ");
-            const parsedStartDate = start ? parse(start, dateFormat, new Date()) : NaN;
-            const parsedEndDate = end ? parse(end, dateFormat, new Date()) : NaN;
+            const parsedStartDate = start ? parse(start, dateFormat, new Date(), { locale: this.state.locale }) : NaN;
+            const parsedEndDate = end ? parse(end, dateFormat, new Date(), { locale: this.state.locale }) : NaN;
 
             if (!isNaN(parsedStartDate) && (!end || !isNaN(parsedEndDate))) {
                 this.setState({
@@ -331,7 +341,7 @@ export class ReactDatePicker extends Component {
                 this.setState({ invalidDate: true });
             }
         } else {
-            const parsedDate = parse(inputValue, dateFormat, new Date());
+            const parsedDate = parse(inputValue, dateFormat, new Date(), { locale: this.state.locale });
             if (!isNaN(parsedDate)) {
                 this.setState({
                     dateValueStart: parsedDate,
@@ -394,13 +404,13 @@ export class ReactDatePicker extends Component {
         let parsedDate = null;
 
         if (inputField && inputField.value.trim() !== "") {
-            parsedDate = parse(inputField.value, dateFormat, new Date());
+            parsedDate = parse(inputField.value, dateFormat, new Date(), { locale: this.state.locale });
         }
 
         if (this.props.dateRange) {
             const [start, end] = inputField ? inputField.value.split(" - ") : ["", ""];
-            const parsedStartDate = start ? parse(start, dateFormat, new Date()) : "";
-            const parsedEndDate = end ? parse(end, dateFormat, new Date()) : "";
+            const parsedStartDate = start ? parse(start, dateFormat, new Date(), { locale: this.state.locale }) : "";
+            const parsedEndDate = end ? parse(end, dateFormat, new Date(), { locale: this.state.locale }) : "";
 
             if (isNaN(parsedStartDate)) {
                 this.setState({ invalidDate: true });
@@ -432,8 +442,8 @@ export class ReactDatePicker extends Component {
                 // check if the entered date is valid otherwise reset the date
                 if (this.props.dateRange) {
                     const [start, end] = inputField.value.split(" - ");
-                    const parsedStartDate = start ? parse(start, dateFormat, new Date()) : NaN;
-                    const parsedEndDate = end ? parse(end, dateFormat, new Date()) : NaN;
+                    const parsedStartDate = start ? parse(start, dateFormat, new Date(), { locale: this.state.locale }) : NaN;
+                    const parsedEndDate = end ? parse(end, dateFormat, new Date(), { locale: this.state.locale }) : NaN;
 
                     if (isNaN(parsedStartDate)) {
                         this.setState({ dateValueStart: now, dateValueEnd: now }, () => {
@@ -445,7 +455,7 @@ export class ReactDatePicker extends Component {
                         });
                     }
                 } else {
-                    const parsedDate = parse(inputField.value, dateFormat, new Date());
+                    const parsedDate = parse(inputField.value, dateFormat, new Date(), { locale: this.state.locale });
                     if (isNaN(parsedDate)) {
                         this.setState({ dateValueStart: now, editedValueStart: now }, () => {
                             this.setState({ dateValueStart: null, editedValueStart: null });
