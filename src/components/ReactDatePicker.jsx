@@ -442,7 +442,9 @@ export class ReactDatePicker extends Component {
                 // check if the entered date is valid otherwise reset the date
                 if (this.props.dateRange) {
                     const [start, end] = inputField.value.split(" - ");
-                    const parsedStartDate = start ? parse(start, dateFormat, new Date(), { locale: this.state.locale }) : NaN;
+                    const parsedStartDate = start
+                        ? parse(start, dateFormat, new Date(), { locale: this.state.locale })
+                        : NaN;
                     const parsedEndDate = end ? parse(end, dateFormat, new Date(), { locale: this.state.locale }) : NaN;
 
                     if (isNaN(parsedStartDate)) {
