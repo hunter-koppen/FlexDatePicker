@@ -189,8 +189,13 @@ export class ReactDatePicker extends Component {
         if (this.props.dateAttribute && this.props.dateAttribute.status === "available") {
             // set initial values
             if (this.state.readOnly === null) {
+                const hasAvailableEndDate =
+                    this.props.dateRange &&
+                    this.props.dateAttributeEnd &&
+                    this.props.dateAttributeEnd.status === "available";
                 this.setState({
                     dateValueStart: this.props.dateAttribute.value,
+                    dateValueEnd: hasAvailableEndDate ? this.props.dateAttributeEnd.value : this.state.dateValueEnd,
                     readOnly: this.props.dateAttribute.readOnly
                 });
             }
