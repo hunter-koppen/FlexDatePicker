@@ -9,9 +9,50 @@ import nextIcon from "../ui/arrow-right.svg";
 import arrowIcon from "../ui/arrow-up.svg";
 import crossIcon from "../ui/cross-icon.svg";
 
-/* global mx */
-
 const now = new Date();
+
+// The global mx object is being replaced by the mx-api modules, which do not expose the user's
+// locale. Read it defensively and fall back to the browser's Intl data, so the widget keeps
+// working (with browser formatting) instead of crashing once mx is gone.
+function getMxLocale() {
+    const mxLocale = window.mx?.session?.sessionData?.locale;
+    if (mxLocale?.dates && mxLocale?.patterns) {
+        return mxLocale;
+    }
+
+    const lang = document.documentElement.lang || navigator.language || "en";
+    const monthNames = style =>
+        Array.from({ length: 12 }, (_, i) => new Date(2000, i, 1).toLocaleString(lang, { month: style }));
+    // 2 January 2000 is a Sunday, so index 0 is Sunday like Mendix' weekday arrays
+    const shortWeekdays = Array.from({ length: 7 }, (_, i) =>
+        new Date(2000, 0, 2 + i).toLocaleString(lang, { weekday: "short" })
+    );
+    let firstDayOfWeek = 1;
+    let minimalDaysInFirstWeek = 4;
+    try {
+        const weekInfo = new Intl.Locale(lang).weekInfo || new Intl.Locale(lang).getWeekInfo?.();
+        if (weekInfo) {
+            firstDayOfWeek = weekInfo.firstDay % 7;
+            minimalDaysInFirstWeek = weekInfo.minimalDays;
+        }
+    } catch {
+        // keep the ISO defaults
+    }
+
+    return {
+        code: lang,
+        firstDayOfWeek,
+        minimalDaysInFirstWeek,
+        dates: {
+            eras: ["BC", "AD"],
+            months: monthNames("long"),
+            shortMonths: monthNames("short"),
+            shortWeekdays,
+            dayPeriods: ["AM", "PM"]
+        },
+        patterns: { date: "dd-MM-yyyy", time: "HH:mm", datetime: "dd-MM-yyyy HH:mm" }
+    };
+}
 
 export class ReactDatePicker extends Component {
     constructor(props) {
@@ -51,14 +92,16 @@ export class ReactDatePicker extends Component {
     componentDidMount() {
         this.setClasses();
 
-        const firstDayOfTheWeek = mx.session.sessionData.locale.firstDayOfWeek;
-        const minimalDaysInFirstWeek = mx.session.sessionData.locale.minimalDaysInFirstWeek;
-        const eras = mx.session.sessionData.locale.dates.eras;
+        this.mxLocale = getMxLocale();
+        const { patterns } = this.mxLocale;
+        const firstDayOfTheWeek = this.mxLocale.firstDayOfWeek;
+        const minimalDaysInFirstWeek = this.mxLocale.minimalDaysInFirstWeek;
+        const eras = this.mxLocale.dates.eras;
         const quarters = ["1", "2", "3", "4"];
-        const months = mx.session.sessionData.locale.dates.months;
-        const shortMonths = mx.session.sessionData.locale.dates.shortMonths;
-        const days = mx.session.sessionData.locale.dates.shortWeekdays;
-        const dayPeriods = mx.session.sessionData.locale.dates.dayPeriods;
+        const months = this.mxLocale.dates.months;
+        const shortMonths = this.mxLocale.dates.shortMonths;
+        const days = this.mxLocale.dates.shortWeekdays;
+        const dayPeriods = this.mxLocale.dates.dayPeriods;
 
         const customLocale = {
             localize: {
@@ -70,9 +113,9 @@ export class ReactDatePicker extends Component {
                 dayPeriod: n => dayPeriods[n]
             },
             formatLong: {
-                date: () => mx.session.sessionData.locale.patterns.date,
-                dateTime: () => mx.session.sessionData.locale.patterns.datetime,
-                time: () => mx.session.sessionData.locale.patterns.time
+                date: () => patterns.date,
+                dateTime: () => patterns.datetime,
+                time: () => patterns.time
             },
             match: {
                 month: string => {
@@ -108,15 +151,15 @@ export class ReactDatePicker extends Component {
         } else {
             switch (this.props.pickerType) {
                 case "date":
-                    dateFormat = mx.session.sessionData.locale.patterns.date;
+                    dateFormat = patterns.date;
                     break;
                 case "time":
-                    dateFormat = mx.session.sessionData.locale.patterns.time;
-                    timeFormat = mx.session.sessionData.locale.patterns.time;
+                    dateFormat = patterns.time;
+                    timeFormat = patterns.time;
                     break;
                 case "datetime":
-                    dateFormat = mx.session.sessionData.locale.patterns.datetime;
-                    timeFormat = mx.session.sessionData.locale.patterns.time;
+                    dateFormat = patterns.datetime;
+                    timeFormat = patterns.time;
                     break;
                 case "month":
                     dateFormat = "MMMM";
@@ -125,7 +168,7 @@ export class ReactDatePicker extends Component {
                     dateFormat = "yyyy";
                     break;
                 default:
-                    dateFormat = mx.session.sessionData.locale.patterns.date;
+                    dateFormat = patterns.date;
             }
         }
 
@@ -138,15 +181,14 @@ export class ReactDatePicker extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(this.props.widgetName);
         this.setClasses();
 
+        // Compare with the last processed list instead of prevProps: the React client can deliver
+        // the list already "available" on the first render, which prevProps would never notice.
         if (this.props.excludeOrInclude === "exclude" && this.props.excludedDates) {
             if (this.props.excludedDates.status === "available") {
-                if (
-                    prevProps.excludedDates !== this.props.excludedDates &&
-                    this.props.excludedDates.items !== this.state.excludedDates
-                ) {
+                if (this.processedExcludedDates !== this.props.excludedDates) {
+                    this.processedExcludedDates = this.props.excludedDates;
                     const sortInstrs = [[this.props.excludedDatesAttribute.id, "asc"]];
                     this.props.excludedDates.setSortOrder(sortInstrs);
                     const excludedDates = this.props.excludedDates.items.map(item => {
@@ -161,10 +203,8 @@ export class ReactDatePicker extends Component {
         }
         if (this.props.excludeOrInclude === "include" && this.props.includedDates) {
             if (this.props.includedDates.status === "available") {
-                if (
-                    prevProps.includedDates !== this.props.includedDates &&
-                    this.props.includedDates.items !== this.state.includedDates
-                ) {
+                if (this.processedIncludedDates !== this.props.includedDates) {
+                    this.processedIncludedDates = this.props.includedDates;
                     const includedDates = this.props.includedDates.items.map(item => {
                         const dateValue = this.props.includedDatesAttribute.get(item).value;
                         return dateValue;
@@ -568,7 +608,7 @@ export class ReactDatePicker extends Component {
         // Calculate the offset based on preset type and direction
         const calculateOffset = (date, offset, unit, isEndDate) => {
             const newDate = new Date(date);
-            const firstDayOfWeek = mx.session.sessionData.locale.firstDayOfWeek;
+            const firstDayOfWeek = this.state.firstDayOfTheWeek ?? 1;
 
             switch (unit) {
                 case "days":
@@ -661,6 +701,11 @@ export class ReactDatePicker extends Component {
         );
     };
 
+    // Month names in the app's language (Mendix locale), not the browser's
+    monthName = monthIndex =>
+        this.mxLocale?.dates?.months?.[monthIndex] ??
+        new Date(2000, monthIndex, 1).toLocaleString("default", { month: "long" });
+
     customHeader = ({
         date,
         changeYear,
@@ -683,7 +728,7 @@ export class ReactDatePicker extends Component {
                         onClick={this.toggleMonthPicker}
                         className={`flex-datepicker-header-button ${this.state.showMonthPicker ? "open" : ""}`}
                     >
-                        {new Date(date).toLocaleString("default", { month: "long" })}
+                        {this.monthName(new Date(date).getMonth())}
                         <img src={arrowIcon} alt="Arrow" />
                     </button>
                     <button
@@ -709,7 +754,7 @@ export class ReactDatePicker extends Component {
                                     }}
                                     className={i === date.getMonth() ? "selected" : ""}
                                 >
-                                    {new Date(0, i).toLocaleString("default", { month: "long" })}
+                                    {this.monthName(i)}
                                 </button>
                             ))}
                         </div>
