@@ -4,10 +4,7 @@ import DatePicker from "react-datepicker";
 import { parse, setHours, setMinutes, setSeconds } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 
-import prevIcon from "../ui/arrow-left.svg";
-import nextIcon from "../ui/arrow-right.svg";
-import arrowIcon from "../ui/arrow-up.svg";
-import crossIcon from "../ui/cross-icon.svg";
+import { arrowIcon, crossIcon, nextIcon, prevIcon } from "../ui/icons";
 
 const now = new Date();
 
